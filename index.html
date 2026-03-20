@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lennon Spektor — Broadcast Journalist</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,600;1,400;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:    #050d1a;
+      --navy-2:  #0a1628;
+      --navy-3:  #0f1e34;
+      --bd:      #1a2e48;
+      --amber:   #e8a030;
+      --amber-lt:#f4bc5c;
+      --white:   #ffffff;
+      --cream:   #f5f2ec;
+      --ink:     #0c1520;
+      --ink-2:   #3d5470;
+      --ink-3:   #7a98b4;
+      --red:     #c03525;
+    }
+
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      background: var(--white);
+      color: var(--ink);
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── REVEAL ANIMATIONS (CSS class-based, 100% reliable) ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .reveal.left  { transform: translateX(-28px); }
+    .reveal.right { transform: translateX(28px); }
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+    .reveal-delay-5 { transition-delay: 0.5s; }
+    .reveal-delay-6 { transition-delay: 0.6s; }
+    .reveal-delay-7 { transition-delay: 0.7s; }
+
+    /* ── TICKER ── */
+    .ticker-wrap {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      height: 28px;
+      background: var(--amber);
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+    .ticker-label {
+      flex-shrink: 0;
+      background: var(--red);
+      color: #fff;
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 0 1rem;
+      height: 100%;
+      display: flex;
+      align-items: center;
+    }
+    .ticker-track {
+      display: flex;
+      width: max-content;
+      animation: ticker 38s linear infinite;
+    }
+    .ticker-track:hover { animation-play-state: paused; }
+    .ticker-item {
+      padding: 0 2rem;
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--navy);
+      white-space: nowrap;
+    }
+    .ticker-item::after { content: ' ★ '; opacity: 0.5; }
+    @keyframes ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 28px; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2.5rem;
+      transition: background 0.3s, backdrop-filter 0.3s;
+    }
+    nav.scrolled {
+      background: rgba(5,13,26,0.96);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--bd);
+    }
+    .nav-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.2rem;
+      letter-spacing: 0.14em;
+      color: var(--amber);
+    }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      color: rgba(255,255,255,0.55);
+      text-decoration: none;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--amber); }
+
+    /* ── HERO ── */
+    #hero {
+      position: relative;
+      height: 100vh;
+      min-height: 620px;
+      margin-top: 28px;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-start;
+      padding-bottom: 7vh;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: -12%;
+      /* Shift right past the broadcaster to put Lennon center frame */
+      background: url('assets/images/center2.jpg') 46% 60% / cover no-repeat;
+      transform: scale(1.1);
+      will-change: transform;
+    }
+    /* Spotlight vignette: brightest around her position, dark edges */
+    .hero-vignette {
+      position: absolute;
+      inset: 0;
+      background:
+        /* Spotlight: Lennon is now near center of viewport */
+        radial-gradient(ellipse 32% 68% at 46% 54%, transparent 0%, rgba(5,13,26,0.1) 28%, rgba(5,13,26,0.7) 60%, rgba(5,13,26,0.96) 100%),
+        /* Very heavy left fade — broadcaster goes almost black */
+        linear-gradient(to right, rgba(5,13,26,1) 0%, rgba(5,13,26,0.85) 18%, rgba(5,13,26,0.3) 36%, transparent 48%),
+        /* Heavy right fade — fades the boys */
+        linear-gradient(to left, rgba(5,13,26,0.97) 0%, rgba(5,13,26,0.6) 18%, transparent 40%),
+        /* Top fade — sky goes dark */
+        linear-gradient(to bottom, rgba(5,13,26,0.8) 0%, transparent 30%),
+        /* Bottom — light so dress and desk are visible */
+        linear-gradient(to top, rgba(5,13,26,0.9) 0%, rgba(5,13,26,0.15) 18%, transparent 32%);
+    }
+    .hero-content {
+      position: relative;
+      z-index: 3;
+      padding: 0 8vw;
+      max-width: 760px;
+    }
+    .hero-kicker {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+    .kicker-line { width: 28px; height: 1px; background: var(--amber); }
+    .kicker-text {
+      font-size: 0.72rem;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--amber);
+    }
+    .hero-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(5.5rem, 11vw, 11rem);
+      line-height: 0.87;
+      letter-spacing: 0.025em;
+      color: var(--white);
+      opacity: 0;
+      transform: translateY(60px);
+      transition: opacity 1s cubic-bezier(0.16,1,0.3,1), transform 1s cubic-bezier(0.16,1,0.3,1);
+      transition-delay: 0.5s;
+    }
+    .hero-name.visible { opacity: 1; transform: none; }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-top: 1.5rem;
+      padding: 0.55rem 1.1rem;
+      border: 1px solid var(--amber);
+      border-radius: 2px;
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--amber);
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+      transition-delay: 1.0s;
+    }
+    .hero-badge.visible { opacity: 1; transform: none; }
+    .hero-tagline {
+      margin-top: 0.9rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.1rem;
+      color: rgba(255,255,255,0.65);
+      opacity: 0;
+      transition: opacity 0.6s ease;
+      transition-delay: 1.2s;
+    }
+    .hero-tagline.visible { opacity: 1; }
+    .hero-cta {
+      margin-top: 2rem;
+      display: flex;
+      gap: 0.9rem;
+      flex-wrap: wrap;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+      transition-delay: 1.35s;
+    }
+    .hero-cta.visible { opacity: 1; transform: none; }
+    .btn {
+      padding: 0.8rem 1.9rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 2px;
+      transition: all 0.2s;
+    }
+    .btn-amber { background: var(--amber); color: var(--navy); }
+    .btn-amber:hover { background: var(--amber-lt); }
+    .btn-ghost { border: 1px solid rgba(255,255,255,0.3); color: rgba(255,255,255,0.8); }
+    .btn-ghost:hover { border-color: var(--amber); color: var(--amber); }
+    .scroll-hint {
+      position: absolute;
+      bottom: 2rem; left: 8vw;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.62rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      opacity: 0;
+      transition: opacity 0.8s ease;
+      transition-delay: 2s;
+    }
+    .scroll-hint.visible { opacity: 1; }
+    .scroll-line {
+      width: 1px; height: 40px;
+      background: linear-gradient(to bottom, var(--amber), transparent);
+      animation: spulse 2.2s ease-in-out infinite;
+    }
+    @keyframes spulse { 0%,100%{opacity:0.3} 50%{opacity:1} }
+
+    /* ── STATS ── */
+    #stats {
+      background: var(--navy-2);
+      border-bottom: 1px solid var(--bd);
+      display: grid;
+      grid-template-columns: repeat(4,1fr);
+    }
+    .stat {
+      padding: 2rem 1rem;
+      text-align: center;
+      border-right: 1px solid var(--bd);
+    }
+    .stat:last-child { border-right: none; }
+    .stat-num {
+      display: block;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3.5rem;
+      line-height: 1;
+      color: var(--amber);
+    }
+    .stat-label {
+      margin-top: 0.3rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+    }
+
+    /* ── SECTION UTILITIES ── */
+    .sec { padding: 3.5rem 8vw; }
+    .sec-dark { background: var(--navy); color: var(--white); }
+    .sec-white { background: var(--white); }
+    .sec-cream { background: var(--cream); }
+
+    .sec-kicker {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 0.5rem;
+    }
+    .kl { width: 20px; height: 1px; background: var(--amber); }
+    .kt {
+      font-size: 0.68rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--amber);
+    }
+    .sec-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.8rem, 5vw, 4.5rem);
+      line-height: 0.95;
+      margin-bottom: 2rem;
+    }
+
+    /* ── INTRO FEATURE — Studio shot + bio ── */
+    #intro {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 0;
+    }
+    .intro-photo {
+      position: relative;
+      overflow: hidden;
+      min-height: 520px;
+    }
+    .intro-photo img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center 30%;
+      display: block;
+      transition: transform 0.6s ease;
+    }
+    .intro-photo:hover img { transform: scale(1.03); }
+    .intro-photo-caption {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 1rem 1.5rem;
+      background: linear-gradient(to top, rgba(5,13,26,0.9), transparent);
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--amber);
+    }
+    .intro-text {
+      background: var(--navy);
+      padding: 3.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .intro-text .sec-title { color: var(--white); }
+    .intro-text p {
+      font-size: 1rem;
+      line-height: 1.82;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 1.1rem;
+    }
+    .intro-text p:first-of-type {
+      font-size: 1.12rem;
+      color: var(--white);
+      font-weight: 500;
+    }
+    .intro-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+    .intro-tag {
+      padding: 0.35rem 0.85rem;
+      border: 1px solid rgba(232,160,48,0.35);
+      border-radius: 2px;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--amber);
+    }
+
+    /* ── VIDEOS ── */
+    #videos { background: var(--cream); }
+    .video-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    .video-card {
+      background: var(--white);
+      border-radius: 4px;
+      overflow: hidden;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+      border: 1px solid #ddd8cf;
+    }
+    .vc-label {
+      padding: 0.7rem 1.2rem;
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--amber);
+      border-bottom: 1px solid #ddd8cf;
+      background: var(--cream);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .vc-label::before { content: '▶'; font-size: 0.5rem; }
+    .vw { position: relative; padding-bottom: 56.25%; height: 0; background: var(--navy); }
+    .vw iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+    .vc-body { padding: 1.1rem 1.2rem 1.3rem; }
+    .vc-title { font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 0.5rem; }
+    .vc-desc { font-size: 0.92rem; color: var(--ink-2); line-height: 1.72; }
+    .vc-role {
+      display: inline-block;
+      margin-top: 0.75rem;
+      padding: 0.25rem 0.7rem;
+      background: rgba(232,160,48,0.1);
+      border: 1px solid rgba(232,160,48,0.3);
+      border-radius: 2px;
+      font-size: 0.66rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--amber);
+    }
+
+    /* ── PARALLAX ── */
+    .pb {
+      position: relative;
+      height: 50vh;
+      min-height: 360px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+    }
+    .pb-bg {
+      position: absolute;
+      inset: -20%;
+      background-size: cover;
+      background-position: center;
+      will-change: transform;
+    }
+    .pb-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(5,13,26,0.75);
+    }
+    #pb1 .pb-bg { background-image: url('assets/images/3.jpg'); background-position: center 35%; }
+    #pb2 .pb-bg { background-image: url('assets/images/6.jpg'); background-position: center 28%; }
+    .pb-content {
+      position: relative;
+      z-index: 2;
+      padding: 0 8vw;
+      max-width: 720px;
+    }
+    .pb-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.6rem, 3.2vw, 2.6rem);
+      font-style: italic;
+      line-height: 1.35;
+      color: var(--white);
+    }
+    .pb-quote em { font-style: normal; color: var(--amber); }
+    .pb-attr {
+      margin-top: 1rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--amber);
+    }
+
+    /* ── AWARDS ── */
+    .awards-photos {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 1.25rem;
+      margin-bottom: 1.75rem;
+    }
+    .af {
+      position: relative;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .af img {
+      width: 100%;
+      display: block;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+    .af:hover img { transform: scale(1.03); }
+    .af-cap {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 0.75rem 1rem;
+      background: linear-gradient(to top, rgba(5,13,26,0.95), transparent);
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--amber);
+    }
+    .awards-grid {
+      display: grid;
+      grid-template-columns: repeat(4,1fr);
+      gap: 1px;
+      background: var(--bd);
+      border: 1px solid var(--bd);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .award-card {
+      background: var(--navy-3);
+      padding: 1.3rem;
+      transition: background 0.2s;
+    }
+    .award-card:hover { background: #142438; }
+    .award-icon { font-size: 1.3rem; margin-bottom: 0.5rem; }
+    .award-org {
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 0.3rem;
+    }
+    .award-title { font-size: 0.92rem; font-weight: 600; color: var(--white); line-height: 1.35; }
+    .award-year { margin-top: 0.4rem; font-size: 0.72rem; color: var(--ink-3); }
+    .badge {
+      display: inline-block;
+      margin-top: 0.55rem;
+      padding: 0.2rem 0.55rem;
+      border-radius: 2px;
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .bw { background: rgba(232,160,48,0.12); color: var(--amber); border: 1px solid rgba(232,160,48,0.3); }
+    .bn { background: rgba(100,150,220,0.1); color: #7ba8d4; border: 1px solid rgba(100,150,220,0.2); }
+
+    /* ── EXPERIENCE ── */
+    .exp-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3.5rem;
+      align-items: start;
+    }
+    .timeline { position: relative; padding-left: 1.25rem; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0.5rem; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, var(--amber), transparent);
+    }
+    .tl {
+      position: relative;
+      padding: 0 0 2.25rem 1.6rem;
+    }
+    .tl:last-child { padding-bottom: 0; }
+    .tl-dot {
+      position: absolute;
+      left: -0.32rem; top: 0.4rem;
+      width: 0.65rem; height: 0.65rem;
+      border-radius: 50%;
+      background: var(--amber);
+      border: 2px solid var(--cream);
+      box-shadow: 0 0 0 1px rgba(232,160,48,0.3);
+    }
+    .tl-date {
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 0.28rem;
+    }
+    .tl-title { font-size: 1rem; font-weight: 700; color: var(--ink); margin-bottom: 0.15rem; }
+    .tl-org { font-size: 0.85rem; color: var(--ink-2); margin-bottom: 0.55rem; font-style: italic; }
+    .tl-desc { font-size: 0.95rem; color: var(--ink-2); line-height: 1.75; }
+    .tl-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.7rem; }
+    .tl-tag {
+      padding: 0.2rem 0.6rem;
+      background: rgba(232,160,48,0.08);
+      border: 1px solid rgba(232,160,48,0.25);
+      border-radius: 2px;
+      font-size: 0.64rem;
+      letter-spacing: 0.08em;
+      color: var(--amber);
+    }
+
+    .exp-photo-col {
+      position: sticky;
+      top: 7rem;
+    }
+    .exp-img {
+      width: 100%;
+      border-radius: 3px;
+      display: block;
+      margin-bottom: 1rem;
+      border: 1px solid #e2ddd6;
+    }
+    .exp-img-cap {
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+      margin-bottom: 1.25rem;
+    }
+
+    /* ── GALLERY FILMSTRIP ── */
+    #gallery {
+      background: var(--navy-2);
+      border-top: 1px solid var(--bd);
+      border-bottom: 1px solid var(--bd);
+      padding: 2.5rem 0;
+      overflow: hidden;
+    }
+    .gallery-header {
+      padding: 0 8vw;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .film-strip {
+      display: flex;
+      gap: 0.85rem;
+      width: max-content;
+      animation: filmroll 32s linear infinite;
+    }
+    .film-strip:hover { animation-play-state: paused; }
+    @keyframes filmroll { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+    .film-frame {
+      flex-shrink: 0;
+      width: 300px;
+      height: 200px;
+      border-radius: 2px;
+      overflow: hidden;
+      border: 1px solid var(--bd);
+      cursor: pointer;
+    }
+    .film-frame img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+      transition: transform 0.4s, filter 0.3s;
+      filter: brightness(0.82) saturate(0.85);
+    }
+    .film-frame:hover img { transform: scale(1.06); filter: brightness(1) saturate(1.05); }
+
+    /* ── ABOUT ── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    .about-photo-wrap { position: relative; }
+    .about-photo {
+      width: 100%;
+      aspect-ratio: 3/4;
+      object-fit: cover;
+      object-position: top;
+      border-radius: 3px;
+      display: block;
+    }
+    .about-accent {
+      position: absolute;
+      top: 0.8rem; left: 0.8rem; right: -0.8rem; bottom: -0.8rem;
+      border: 1px solid rgba(232,160,48,0.25);
+      border-radius: 3px;
+      z-index: -1;
+    }
+    .about-text .sec-title { margin-bottom: 1.5rem; }
+    .about-text p {
+      font-size: 1rem;
+      line-height: 1.85;
+      color: var(--ink-2);
+      margin-bottom: 1.1rem;
+    }
+    .about-text p:first-of-type { font-size: 1.1rem; color: var(--ink); font-weight: 500; }
+    .about-text p:last-of-type { margin-bottom: 0; }
+
+    /* ── SKILLS ── */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px,1fr));
+      gap: 0.75rem;
+    }
+    .skill-item {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      padding: 1rem 1.1rem;
+      background: var(--white);
+      border: 1px solid #ddd8cf;
+      border-radius: 3px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .skill-item:hover { border-color: var(--amber); box-shadow: 0 2px 12px rgba(232,160,48,0.1); }
+    .skill-icon { font-size: 1.15rem; flex-shrink: 0; }
+    .skill-name { font-size: 0.9rem; font-weight: 500; color: var(--ink-2); }
+
+    /* ── HONORS ── */
+    .honors-list { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.25rem; }
+    .honor-tag {
+      padding: 0.45rem 1.1rem;
+      border: 1px solid #ddd8cf;
+      border-radius: 100px;
+      font-size: 0.85rem;
+      color: var(--ink-2);
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .honor-tag:hover { border-color: var(--amber); color: var(--amber); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--navy);
+      border-top: 1px solid var(--bd);
+      padding: 4rem 8vw 2.5rem;
+      text-align: center;
+    }
+    .footer-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.8rem, 6vw, 5.5rem);
+      letter-spacing: 0.04em;
+      color: var(--white);
+      margin-bottom: 0.35rem;
+    }
+    .footer-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.1rem;
+      color: var(--ink-3);
+      margin-bottom: 2.25rem;
+    }
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 0.85rem;
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+    }
+    .footer-link {
+      padding: 0.7rem 1.5rem;
+      border: 1px solid var(--bd);
+      border-radius: 2px;
+      color: var(--ink-3);
+      text-decoration: none;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .footer-link:hover { border-color: var(--amber); color: var(--amber); }
+    .footer-copy { font-size: 0.72rem; color: var(--ink-3); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1000px) {
+      #intro { grid-template-columns: 1fr; }
+      .intro-photo { min-height: 320px; }
+      .video-grid { grid-template-columns: 1fr; }
+      .awards-photos { grid-template-columns: 1fr; }
+      .awards-grid { grid-template-columns: repeat(2,1fr); }
+      .exp-grid { grid-template-columns: 1fr; }
+      .exp-photo-col { position: static; order: -1; }
+      .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .about-photo { aspect-ratio: 4/3; }
+    }
+    @media (max-width: 700px) {
+      #stats { grid-template-columns: repeat(2,1fr); }
+      .awards-grid { grid-template-columns: 1fr; }
+      nav { padding: 0.85rem 1.25rem; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TICKER -->
+  <div class="ticker-wrap">
+    <div class="ticker-label">Breaking</div>
+    <div class="ticker-track">
+      <span class="ticker-item">3x Regional Student Emmy Award Winner</span>
+      <span class="ticker-item">FSPA Best of the Best — Spring Digitals 2025</span>
+      <span class="ticker-item">STN National Convention 2nd Place</span>
+      <span class="ticker-item">FSPA All-Florida Awards 2024–2026</span>
+      <span class="ticker-item">STN Outstanding Achievement 2025</span>
+      <span class="ticker-item">FSPA Show Evaluation Gold 2026</span>
+      <span class="ticker-item">Distinguished Producer Award — RaiderVision</span>
+      <span class="ticker-item">4x Emmy Nominee 2025</span>
+      <span class="ticker-item">3x Regional Student Emmy Award Winner</span>
+      <span class="ticker-item">FSPA Best of the Best — Spring Digitals 2025</span>
+      <span class="ticker-item">STN National Convention 2nd Place</span>
+      <span class="ticker-item">FSPA All-Florida Awards 2024–2026</span>
+      <span class="ticker-item">STN Outstanding Achievement 2025</span>
+      <span class="ticker-item">FSPA Show Evaluation Gold 2026</span>
+      <span class="ticker-item">Distinguished Producer Award — RaiderVision</span>
+      <span class="ticker-item">4x Emmy Nominee 2025</span>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <nav id="mainNav">
+    <div class="nav-name">Lennon Spektor</div>
+    <ul class="nav-links">
+      <li><a href="#intro">About</a></li>
+      <li><a href="#videos">Work</a></li>
+      <li><a href="#awards">Awards</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="hero-vignette"></div>
+    <div class="hero-content">
+      <div class="hero-kicker reveal visible">
+        <div class="kicker-line"></div>
+        <span class="kicker-text">Broadcast Journalist &nbsp;·&nbsp; Executive Producer</span>
+      </div>
+      <h1 class="hero-name" id="heroName">LENNON<br>SPEKTOR</h1>
+      <div class="hero-badge" id="heroBadge">★&nbsp; 3x Regional Student Emmy Award Winner</div>
+      <p class="hero-tagline" id="heroTagline">Gulliver Preparatory School &nbsp;·&nbsp; Miami Beach, FL</p>
+      <div class="hero-cta" id="heroCta">
+        <a href="#awards" class="btn btn-amber">View the Record</a>
+        <a href="#contact" class="btn btn-ghost">Connect</a>
+      </div>
+    </div>
+    <div class="scroll-hint" id="scrollHint">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <div id="stats">
+    <div class="stat reveal reveal-delay-1">
+      <span class="stat-num" data-target="3">0</span>
+      <span class="stat-label">Emmy Wins</span>
+    </div>
+    <div class="stat reveal reveal-delay-2">
+      <span class="stat-num" data-target="7">0</span>
+      <span class="stat-label">Emmy Nominations</span>
+    </div>
+    <div class="stat reveal reveal-delay-3">
+      <span class="stat-num" data-target="10" data-suffix="+">0</span>
+      <span class="stat-label">Awards and Honors</span>
+    </div>
+    <div class="stat reveal reveal-delay-4">
+      <span class="stat-num" data-target="2" data-suffix="yrs">0</span>
+      <span class="stat-label">Executive Producing</span>
+    </div>
+  </div>
+
+  <!-- INTRO FEATURE -->
+  <div id="intro">
+    <div class="intro-photo reveal left">
+      <img src="assets/images/1.jpg" alt="Lennon Spektor conducting an interview at RaiderVision">
+      <div class="intro-photo-caption">RaiderVision Studio — Interviewing in the Newsroom</div>
+    </div>
+    <div class="intro-text">
+      <div class="sec-kicker"><div class="kl"></div><span class="kt">Who She Is</span></div>
+      <h2 class="sec-title reveal">The Journalist</h2>
+      <p class="reveal reveal-delay-1">Lennon Spektor is a broadcast journalist, executive producer, and storyteller based in Miami Beach, Florida. By the time most students are applying to college, Lennon had already won three Regional Student Emmy Awards — a distinction most professional journalists never achieve.</p>
+      <p class="reveal reveal-delay-2">At Gulliver Preparatory School, she serves as Executive Producer of Raider Rise and Chief of Feature News at RaiderVision, the school's award-winning broadcast program. She doesn't just appear on camera — she runs the entire operation. Editorial planning, production timelines, scripting, interviews, B-roll, final edits. Every week.</p>
+      <p class="reveal reveal-delay-3">Outside the studio, she teaches journalism to middle schoolers through Breakthrough Miami, translating professional newsroom standards into lessons that stick. She brings the same discipline to an e-commerce business she founded and continues to operate.</p>
+      <div class="intro-tags reveal reveal-delay-4">
+        <span class="intro-tag">Executive Producer</span>
+        <span class="intro-tag">Feature Storytelling</span>
+        <span class="intro-tag">Live Production</span>
+        <span class="intro-tag">Youth Mentor</span>
+        <span class="intro-tag">Entrepreneur</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIDEOS -->
+  <section class="sec" id="videos" style="background: var(--cream);">
+    <div class="sec-kicker"><div class="kl"></div><span class="kt">The Work</span></div>
+    <h2 class="sec-title reveal">Watch Her Stories</h2>
+    <div class="video-grid">
+      <div class="video-card reveal reveal-delay-1">
+        <div class="vc-label">Feature Story — Award-Winning</div>
+        <div class="vw">
+          <iframe src="https://www.youtube.com/embed/-n-GOaWGcHE"
+            title="Feature Story — Lennon Spektor, RaiderVision"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen loading="lazy"></iframe>
+        </div>
+        <div class="vc-body">
+          <div class="vc-title">Award-Winning Feature Story</div>
+          <div class="vc-desc">A community-centered feature story produced by Lennon for RaiderVision — recognized at the Suncoast Chapter Student Production Awards. From story development and source interviews to B-roll shooting and final edit, Lennon directed every phase of production. This is the kind of piece that earns Emmy nominations.</div>
+          <span class="vc-role">Producer / Reporter</span>
+        </div>
+      </div>
+      <div class="video-card reveal reveal-delay-2">
+        <div class="vc-label">Raider Rise — Morning Show</div>
+        <div class="vw">
+          <iframe src="https://www.youtube.com/embed/SYtbuuf0j3o"
+            title="Raider Rise Morning Show — Executive Producer Lennon Spektor"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen loading="lazy"></iframe>
+        </div>
+        <div class="vc-body">
+          <div class="vc-title">Raider Rise — Live Morning Show</div>
+          <div class="vc-desc">Raider Rise is RaiderVision's flagship weekly morning show, reaching the entire Gulliver Preparatory community. As Executive Producer, Lennon runs the show from the ground up — setting the editorial agenda, managing the team, coordinating production logistics, and ensuring every episode meets the standard that earned the program national recognition.</div>
+          <span class="vc-role">Executive Producer</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PARALLAX 1 -->
+  <div class="pb" id="pb1">
+    <div class="pb-bg" id="pb1bg"></div>
+    <div class="pb-content">
+      <p class="pb-quote reveal">"She doesn't just report the story. She <em>builds</em> the entire broadcast."</p>
+      <p class="pb-attr reveal reveal-delay-2">RaiderVision — News for Students, by Students</p>
+    </div>
+  </div>
+
+  <!-- AWARDS -->
+  <section class="sec sec-dark" id="awards">
+    <div class="sec-kicker"><div class="kl"></div><span class="kt">Recognition</span></div>
+    <h2 class="sec-title reveal">The Record</h2>
+    <div class="awards-photos">
+      <div class="af reveal reveal-delay-1">
+        <img src="assets/images/7.jpg" alt="STN Broadcast Excellence Award ceremony" style="aspect-ratio:16/10; object-position: center 15%;">
+        <div class="af-cap">STN Broadcast Excellence Award — Student Television Network National Convention</div>
+      </div>
+      <div class="af reveal reveal-delay-2">
+        <img src="assets/images/12.jpg" alt="Emmy Awards — Bill Cosford Cinema, University of Miami" style="aspect-ratio:16/10; object-position: center 30%;">
+        <div class="af-cap">Suncoast Student Emmy Awards — Bill Cosford Cinema, University of Miami</div>
+      </div>
+    </div>
+    <div class="awards-grid">
+      <div class="award-card reveal reveal-delay-1">
+        <div class="award-icon">🏆</div>
+        <div class="award-org">NATAS — Regional Student Emmy</div>
+        <div class="award-title">3x Emmy Award Winner</div>
+        <div class="award-year">2025</div>
+        <span class="badge bw">Winner</span>
+      </div>
+      <div class="award-card reveal reveal-delay-2">
+        <div class="award-icon">🌟</div>
+        <div class="award-org">NATAS — Regional Student Emmy</div>
+        <div class="award-title">4x Emmy Award Nominee</div>
+        <div class="award-year">2025</div>
+        <span class="badge bn">Nominee</span>
+      </div>
+      <div class="award-card reveal reveal-delay-3">
+        <div class="award-icon">🥇</div>
+        <div class="award-org">FSPA</div>
+        <div class="award-title">Best of the Best — Spring Digitals</div>
+        <div class="award-year">2025</div>
+        <span class="badge bw">Best of Best</span>
+      </div>
+      <div class="award-card reveal reveal-delay-4">
+        <div class="award-icon">🎖️</div>
+        <div class="award-org">FSPA</div>
+        <div class="award-title">Multiple All-Florida Awards</div>
+        <div class="award-year">2024–2026</div>
+        <span class="badge bw">All-Florida</span>
+      </div>
+      <div class="award-card reveal reveal-delay-1">
+        <div class="award-icon">🥈</div>
+        <div class="award-org">STN National Convention</div>
+        <div class="award-title">2nd Place — Crazy 8 Morning Show</div>
+        <div class="award-year">2025</div>
+        <span class="badge bn">2nd Place National</span>
+      </div>
+      <div class="award-card reveal reveal-delay-2">
+        <div class="award-icon">⭐</div>
+        <div class="award-org">STN Show Evaluation</div>
+        <div class="award-title">Outstanding Achievement</div>
+        <div class="award-year">2025</div>
+        <span class="badge bw">Outstanding</span>
+      </div>
+      <div class="award-card reveal reveal-delay-3">
+        <div class="award-icon">🥇</div>
+        <div class="award-org">FSPA Show Evaluation</div>
+        <div class="award-title">Gold Award</div>
+        <div class="award-year">2026</div>
+        <span class="badge bw">Gold</span>
+      </div>
+      <div class="award-card reveal reveal-delay-4">
+        <div class="award-icon">🎬</div>
+        <div class="award-org">RaiderVision</div>
+        <div class="award-title">Distinguished Producer Award</div>
+        <div class="award-year">2024–2025</div>
+        <span class="badge bw">Distinguished</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- PARALLAX 2 -->
+  <div class="pb" id="pb2">
+    <div class="pb-bg" id="pb2bg"></div>
+    <div class="pb-content">
+      <p class="pb-quote reveal">From the studio to the sideline — she goes where the <em>story</em> is.</p>
+      <p class="pb-attr reveal reveal-delay-2">Field Reporter &nbsp;·&nbsp; RaiderVision</p>
+    </div>
+  </div>
+
+  <!-- EXPERIENCE -->
+  <section class="sec sec-white" id="experience">
+    <div class="sec-kicker"><div class="kl"></div><span class="kt">The Newsroom</span></div>
+    <h2 class="sec-title reveal">Experience</h2>
+    <div class="exp-grid">
+      <div class="timeline">
+        <div class="tl reveal">
+          <div class="tl-dot"></div>
+          <div class="tl-date">2024 — Present</div>
+          <div class="tl-title">Executive Producer and Chief of Feature News</div>
+          <div class="tl-org">RaiderVision, Gulliver Preparatory School</div>
+          <div class="tl-desc">Leads the full production cycle for Raider Rise — RaiderVision's flagship weekly broadcast. Manages editorial planning, story assignments, production timelines, and team coordination for a staff of student journalists. Oversees scripting, source interviews, B-roll acquisition, and final edits for both competition submissions and school-wide broadcasts. Recognized with the Distinguished Producer Award for exceptional leadership and consistent show quality. Her feature work has earned recognition at the state and national level from NATAS, FSPA, and STN.</div>
+          <div class="tl-tags">
+            <span class="tl-tag">Executive Producer</span>
+            <span class="tl-tag">Editorial Planning</span>
+            <span class="tl-tag">Team Leadership</span>
+            <span class="tl-tag">Competition Submissions</span>
+          </div>
+        </div>
+        <div class="tl reveal">
+          <div class="tl-dot"></div>
+          <div class="tl-date">2024 — Present</div>
+          <div class="tl-title">Journalism Instructor</div>
+          <div class="tl-org">Breakthrough Miami</div>
+          <div class="tl-desc">Teaches weekend journalism classes to middle-school students as part of Breakthrough Miami's academic enrichment program. Curriculum covers storytelling fundamentals, ethical reporting, interview technique, and on-camera presentation. Develops lesson plans from scratch that translate professional newsroom standards into engaging, accessible instruction for students who have never stepped in front of a camera.</div>
+          <div class="tl-tags">
+            <span class="tl-tag">Curriculum Development</span>
+            <span class="tl-tag">Youth Mentorship</span>
+            <span class="tl-tag">Media Literacy</span>
+          </div>
+        </div>
+        <div class="tl reveal">
+          <div class="tl-dot"></div>
+          <div class="tl-date">June 2025</div>
+          <div class="tl-title">Broadcast Counselor</div>
+          <div class="tl-org">RaiderVision Summer Camp</div>
+          <div class="tl-desc">Led hands-on broadcast workshops for RaiderVision's summer program, teaching scripting, camera operation, and editing fundamentals. Guided student teams from concept through production to a finished broadcast package, replicating the professional workflow used at RaiderVision.</div>
+        </div>
+        <div class="tl reveal">
+          <div class="tl-dot"></div>
+          <div class="tl-date">Summer 2024</div>
+          <div class="tl-title">Student Participant</div>
+          <div class="tl-org">Vogue Summer School, New York City</div>
+          <div class="tl-desc">Selected to attend Vogue's intensive entrepreneurship and business strategy program in New York City. Developed a startup concept and pitched it directly to Vogue Business professionals — applying the same strategic thinking she brings to her own e-commerce venture to a new industry context.</div>
+        </div>
+        <div class="tl reveal">
+          <div class="tl-dot"></div>
+          <div class="tl-date">Ongoing</div>
+          <div class="tl-title">Founder and Operator</div>
+          <div class="tl-org">SillyFeet &nbsp;·&nbsp; E-Commerce</div>
+          <div class="tl-desc">Founded and continues to run a profitable e-commerce business, overseeing product strategy, brand identity, digital marketing, and customer operations. Running a real business as a teenager demonstrates the entrepreneurial independence and self-direction that defines everything she does.</div>
+          <div class="tl-tags">
+            <span class="tl-tag">Entrepreneurship</span>
+            <span class="tl-tag">Brand Strategy</span>
+            <span class="tl-tag">Digital Marketing</span>
+          </div>
+        </div>
+      </div>
+      <div class="exp-photo-col">
+        <img src="assets/images/9.jpg" alt="Lennon Spektor in the newsroom" class="exp-img reveal right">
+        <div class="exp-img-cap reveal right reveal-delay-1">RaiderVision Newsroom — Editorial Planning Session</div>
+        <img src="assets/images/2.jpg" alt="Lennon Spektor conducting an interview" class="exp-img reveal right reveal-delay-2" style="margin-top:0;">
+        <div class="exp-img-cap reveal right reveal-delay-3">On-Camera Interview — RaiderVision Feature Production</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY FILMSTRIP -->
+  <section id="gallery">
+    <div class="gallery-header">
+      <div class="kl"></div>
+      <span class="kt">Behind the Lens</span>
+    </div>
+    <div class="film-strip">
+      <div class="film-frame"><img src="assets/images/3.jpg" alt="Studio production crew"></div>
+      <div class="film-frame"><img src="assets/images/5.jpg" alt="STN stage" style="object-position: center 20%;"></div>
+      <div class="film-frame"><img src="assets/images/7.jpg" alt="STN award" style="object-position: center 15%;"></div>
+      <div class="film-frame"><img src="assets/images/8.jpg" alt="Team at STN" style="object-position: center 25%;"></div>
+      <div class="film-frame"><img src="assets/images/10.jpg" alt="Lennon Spektor at broadcast desk" style="object-position: 40% 55%;"></div>
+      <div class="film-frame"><img src="assets/images/11.jpg" alt="STN Excellence Awards 2025"></div>
+      <div class="film-frame"><img src="assets/images/3.jpg" alt="Studio production crew"></div>
+      <div class="film-frame"><img src="assets/images/5.jpg" alt="STN stage" style="object-position: center 20%;"></div>
+      <div class="film-frame"><img src="assets/images/7.jpg" alt="STN award" style="object-position: center 15%;"></div>
+      <div class="film-frame"><img src="assets/images/8.jpg" alt="Team at STN" style="object-position: center 25%;"></div>
+      <div class="film-frame"><img src="assets/images/10.jpg" alt="Lennon Spektor at broadcast desk" style="object-position: 40% 55%;"></div>
+      <div class="film-frame"><img src="assets/images/11.jpg" alt="STN Excellence Awards 2025"></div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="sec sec-cream" id="about">
+    <div class="about-grid">
+      <div class="about-photo-wrap reveal left">
+        <img src="assets/images/lennon.jpg" alt="Lennon Spektor" class="about-photo">
+        <div class="about-accent"></div>
+      </div>
+      <div class="about-text reveal right">
+        <div class="sec-kicker"><div class="kl"></div><span class="kt">About Lennon</span></div>
+        <h2 class="sec-title">The Full Picture</h2>
+        <p>Lennon Spektor is a junior at Gulliver Preparatory School in Miami Beach, Florida, where she is enrolled in the school's Digital Mass Media and Business and Entrepreneurship signature programs. She has built one of the most decorated high school broadcast journalism portfolios in the country.</p>
+        <p>Her three Regional Student Emmy wins are not just impressive for a teenager — they are impressive for anyone. She earned them through the same work ethic that drives everything she does: showing up early, staying late, holding her team to a high standard, and refusing to submit anything that isn't ready.</p>
+        <p>She is a member of the National Honor Society, National English Honor Society, and Quill and Scroll International Journalism Honor Society. She is a certified Red Cross Lifeguard. She runs a business. She teaches kids. She makes great television.</p>
+        <p>She is exactly the kind of student who arrives on a college campus and immediately makes it better.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section class="sec sec-white" id="skills">
+    <div class="sec-kicker"><div class="kl"></div><span class="kt">Capabilities</span></div>
+    <h2 class="sec-title reveal" style="margin-bottom: 1.75rem;">What She Brings</h2>
+    <div class="skills-grid">
+      <div class="skill-item reveal reveal-delay-1"><span class="skill-icon">🎙️</span><span class="skill-name">Broadcast Journalism</span></div>
+      <div class="skill-item reveal reveal-delay-2"><span class="skill-icon">🎬</span><span class="skill-name">Executive Producing</span></div>
+      <div class="skill-item reveal reveal-delay-3"><span class="skill-icon">✍️</span><span class="skill-name">Scriptwriting</span></div>
+      <div class="skill-item reveal reveal-delay-4"><span class="skill-icon">🎤</span><span class="skill-name">Field Reporting</span></div>
+      <div class="skill-item reveal reveal-delay-1"><span class="skill-icon">🎞️</span><span class="skill-name">Video Editing</span></div>
+      <div class="skill-item reveal reveal-delay-2"><span class="skill-icon">📡</span><span class="skill-name">Live Production</span></div>
+      <div class="skill-item reveal reveal-delay-3"><span class="skill-icon">👩‍🏫</span><span class="skill-name">Journalism Instruction</span></div>
+      <div class="skill-item reveal reveal-delay-4"><span class="skill-icon">💼</span><span class="skill-name">Entrepreneurship</span></div>
+    </div>
+  </section>
+
+  <!-- HONORS -->
+  <section class="sec sec-cream" style="padding-top: 2.5rem; padding-bottom: 2.5rem;">
+    <div class="sec-kicker"><div class="kl"></div><span class="kt">Honor Societies and Affiliations</span></div>
+    <div class="honors-list">
+      <span class="honor-tag">National Honor Society</span>
+      <span class="honor-tag">National English Honor Society</span>
+      <span class="honor-tag">Quill and Scroll International Journalism Honor Society</span>
+      <span class="honor-tag">Red Cross Certified Lifeguard</span>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer id="contact">
+    <div class="footer-name">Lennon Spektor</div>
+    <div class="footer-sub">Broadcast Journalist &nbsp;·&nbsp; Executive Producer &nbsp;·&nbsp; Miami Beach, Florida</div>
+    <div class="footer-links">
+      <a href="mailto:lennonspektor@gmail.com" class="footer-link">Email</a>
+      <a href="https://www.linkedin.com/in/lennonspektor/" target="_blank" rel="noopener" class="footer-link">LinkedIn</a>
+    </div>
+    <div class="footer-copy">2026 Lennon Spektor. All rights reserved.</div>
+  </footer>
+
+  <script type="module">
+    import { animate, scroll } from "https://cdn.jsdelivr.net/npm/motion@latest/+esm"
+
+    // ── NAV scroll ──
+    const nav = document.getElementById('mainNav')
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 60)
+    }, { passive: true })
+
+    // ── HERO entrance (direct CSS class toggle — no Motion needed) ──
+    setTimeout(() => {
+      document.getElementById('heroName').classList.add('visible')
+      document.getElementById('heroBadge').classList.add('visible')
+      document.getElementById('heroTagline').classList.add('visible')
+      document.getElementById('heroCta').classList.add('visible')
+      document.getElementById('scrollHint').classList.add('visible')
+    }, 100)
+
+    // ── HERO parallax ──
+    scroll(
+      animate('#heroBg', { y: [0, 130] }),
+      { target: document.getElementById('hero'), offset: ['start start','end start'] }
+    )
+
+    // ── PARALLAX BREAKS ──
+    scroll(animate('#pb1bg', { y:[0,90] }), { target:document.getElementById('pb1'), offset:['start end','end start'] })
+    scroll(animate('#pb2bg', { y:[0,90] }), { target:document.getElementById('pb2'), offset:['start end','end start'] })
+
+    // ── INTERSECTION OBSERVER — all .reveal elements ──
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible')
+          io.unobserve(entry.target)
+        }
+      })
+    }, { threshold: 0, rootMargin: '0px 0px -40px 0px' })
+
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el))
+
+    // Fallback: reveal anything still hidden after 2.5s (handles edge cases)
+    setTimeout(() => {
+      document.querySelectorAll('.reveal:not(.visible)').forEach(el => el.classList.add('visible'))
+    }, 2500)
+
+    // ── STATS counters (triggered when stats section is visible) ──
+    const statsIO = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          document.querySelectorAll('.stat-num').forEach((el, i) => {
+            const target = parseInt(el.dataset.target)
+            const suffix = el.dataset.suffix || ''
+            let start = 0
+            const step = () => {
+              start += target / 40
+              if (start >= target) {
+                el.textContent = target + suffix
+              } else {
+                el.textContent = Math.floor(start) + suffix
+                requestAnimationFrame(step)
+              }
+            }
+            setTimeout(step, i * 120)
+          })
+          statsIO.disconnect()
+        }
+      })
+    }, { threshold: 0.5 })
+    statsIO.observe(document.getElementById('stats'))
+
+  </script>
+</body>
+</html>
