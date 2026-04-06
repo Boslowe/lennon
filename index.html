@@ -11,1259 +11,1623 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --navy:    #050d1a;
-      --navy-2:  #0a1628;
-      --navy-3:  #0f1e34;
-      --bd:      #1a2e48;
-      --amber:   #e8a030;
-      --amber-lt:#f4bc5c;
-      --white:   #ffffff;
-      --cream:   #f5f2ec;
-      --ink:     #0c1520;
-      --ink-2:   #3d5470;
-      --ink-3:   #7a98b4;
-      --red:     #c03525;
+      --black:     #080808;
+      --surface:   #111111;
+      --surface-2: #181818;
+      --border:    #252525;
+      --pink:      #e8899a;
+      --pink-lt:   #f4b8c6;
+      --pink-dim:  rgba(232,137,154,0.12);
+      --pink-glow: rgba(232,137,154,0.22);
+      --white:     #ffffff;
+      --off-white: #e0e0e0;
+      --muted:     #888888;
+      --muted-2:   #444444;
     }
 
     html { scroll-behavior: smooth; font-size: 16px; }
     body {
-      background: var(--white);
-      color: var(--ink);
+      background: var(--black);
+      color: var(--off-white);
       font-family: 'Inter', sans-serif;
       line-height: 1.6;
       overflow-x: hidden;
     }
 
-    /* ── REVEAL ANIMATIONS (CSS class-based, 100% reliable) ── */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+
+    /* ── REVEAL ── */
     .reveal {
       opacity: 0;
       transform: translateY(28px);
-      transition: opacity 0.65s ease, transform 0.65s ease;
+      transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
     }
     .reveal.left  { transform: translateX(-28px); }
     .reveal.right { transform: translateX(28px); }
-    .reveal.visible {
-      opacity: 1;
-      transform: none;
-    }
-    .reveal-delay-1 { transition-delay: 0.1s; }
-    .reveal-delay-2 { transition-delay: 0.2s; }
-    .reveal-delay-3 { transition-delay: 0.3s; }
-    .reveal-delay-4 { transition-delay: 0.4s; }
-    .reveal-delay-5 { transition-delay: 0.5s; }
-    .reveal-delay-6 { transition-delay: 0.6s; }
-    .reveal-delay-7 { transition-delay: 0.7s; }
+    .reveal.visible { opacity: 1; transform: none; }
+    .d1 { transition-delay: 0.08s; }
+    .d2 { transition-delay: 0.16s; }
+    .d3 { transition-delay: 0.24s; }
+    .d4 { transition-delay: 0.32s; }
 
-    /* ── TICKER ── */
-    .ticker-wrap {
+    /* ── SCROLL PROGRESS ── */
+    .scroll-progress {
       position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 200;
-      height: 28px;
-      background: var(--amber);
-      display: flex;
-      align-items: center;
-      overflow: hidden;
+      top: 0; left: 0;
+      height: 2px;
+      width: 100%;
+      background: var(--pink);
+      transform-origin: left;
+      transform: scaleX(0);
+      z-index: 500;
+      transition: transform 0.1s linear;
     }
-    .ticker-label {
-      flex-shrink: 0;
-      background: var(--red);
-      color: #fff;
-      font-size: 0.6rem;
-      font-weight: 700;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      padding: 0 1rem;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      position: relative;
-      z-index: 2;
-    }
-    .ticker-track {
-      display: flex;
-      width: max-content;
-      animation: ticker 38s linear infinite;
-    }
-    .ticker-track:hover { animation-play-state: paused; }
-    .ticker-item {
-      padding: 0 2rem;
-      font-size: 0.62rem;
-      font-weight: 700;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--navy);
-      white-space: nowrap;
-    }
-    .ticker-item::after { content: ' ★ '; opacity: 0.5; }
-    @keyframes ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
 
     /* ── NAV ── */
     nav {
       position: fixed;
-      top: 28px; left: 0; right: 0;
-      z-index: 100;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      height: 64px;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      padding: 1rem 2.5rem;
-      transition: background 0.3s, backdrop-filter 0.3s;
+      justify-content: space-between;
+      padding: 0 2.5rem;
+      transition: background 0.4s ease, backdrop-filter 0.4s ease, border-color 0.4s ease;
+      border-bottom: 1px solid transparent;
     }
     nav.scrolled {
-      background: rgba(5,13,26,0.96);
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid var(--bd);
+      background: rgba(8,8,8,0.94);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-color: var(--border);
     }
-    .nav-name {
+    .nav-brand {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.2rem;
-      letter-spacing: 0.14em;
-      color: var(--amber);
-    }
-    .nav-links { display: flex; gap: 2rem; list-style: none; }
-    .nav-links a {
-      color: rgba(255,255,255,0.55);
+      font-size: 1.25rem;
+      letter-spacing: 0.1em;
+      color: var(--white);
       text-decoration: none;
-      font-size: 0.78rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
       transition: color 0.2s;
     }
-    .nav-links a:hover { color: var(--amber); }
-
-    /* ── HERO ── */
-    #hero {
-      position: relative;
-      height: 100vh;
-      min-height: 620px;
-      margin-top: 28px;
-      overflow: hidden;
-      display: flex;
-      align-items: flex-end;
-      justify-content: flex-start;
-      padding-bottom: 7vh;
-    }
-    .hero-bg {
-      position: absolute;
-      inset: -12%;
-      /* Shift right past the broadcaster to put Lennon center frame */
-      background: url('assets/images/center2.jpg') 46% 60% / cover no-repeat;
-      transform: scale(1.1);
-      will-change: transform;
-    }
-    /* Spotlight vignette: brightest around her position, dark edges */
-    .hero-vignette {
-      position: absolute;
-      inset: 0;
-      background:
-        /* Spotlight: Lennon is now near center of viewport */
-        radial-gradient(ellipse 32% 68% at 46% 54%, transparent 0%, rgba(5,13,26,0.1) 28%, rgba(5,13,26,0.7) 60%, rgba(5,13,26,0.96) 100%),
-        /* Very heavy left fade — broadcaster goes almost black */
-        linear-gradient(to right, rgba(5,13,26,1) 0%, rgba(5,13,26,0.85) 18%, rgba(5,13,26,0.3) 36%, transparent 48%),
-        /* Heavy right fade — fades the boys */
-        linear-gradient(to left, rgba(5,13,26,0.97) 0%, rgba(5,13,26,0.6) 18%, transparent 40%),
-        /* Top fade — sky goes dark */
-        linear-gradient(to bottom, rgba(5,13,26,0.8) 0%, transparent 30%),
-        /* Bottom — light so dress and desk are visible */
-        linear-gradient(to top, rgba(5,13,26,0.9) 0%, rgba(5,13,26,0.15) 18%, transparent 32%);
-    }
-    .hero-content {
-      position: relative;
-      z-index: 3;
-      padding: 0 8vw;
-      max-width: 760px;
-    }
-    .hero-kicker {
+    .nav-brand:hover { color: var(--pink); }
+    .nav-right {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
-      margin-bottom: 1rem;
+      gap: 2rem;
     }
-    .kicker-line { width: 28px; height: 1px; background: var(--amber); }
-    .kicker-text {
-      font-size: 0.72rem;
-      letter-spacing: 0.26em;
-      text-transform: uppercase;
-      color: var(--amber);
-    }
-    .hero-name {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(5.5rem, 11vw, 11rem);
-      line-height: 0.87;
-      letter-spacing: 0.025em;
-      color: var(--white);
-      opacity: 0;
-      transform: translateY(60px);
-      transition: opacity 1s cubic-bezier(0.16,1,0.3,1), transform 1s cubic-bezier(0.16,1,0.3,1);
-      transition-delay: 0.5s;
-    }
-    .hero-name.visible { opacity: 1; transform: none; }
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.6rem;
-      margin-top: 1.5rem;
-      padding: 0.55rem 1.1rem;
-      border: 1px solid var(--amber);
-      border-radius: 2px;
-      font-size: 0.72rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--amber);
-      opacity: 0;
-      transform: translateY(16px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
-      transition-delay: 1.0s;
-    }
-    .hero-badge.visible { opacity: 1; transform: none; }
-    .hero-tagline {
-      margin-top: 0.9rem;
-      font-family: 'Cormorant Garamond', serif;
-      font-style: italic;
-      font-size: 1.1rem;
-      color: rgba(255,255,255,0.65);
-      opacity: 0;
-      transition: opacity 0.6s ease;
-      transition-delay: 1.2s;
-    }
-    .hero-tagline.visible { opacity: 1; }
-    .hero-cta {
-      margin-top: 2rem;
-      display: flex;
-      gap: 0.9rem;
-      flex-wrap: wrap;
-      opacity: 0;
-      transform: translateY(10px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
-      transition-delay: 1.35s;
-    }
-    .hero-cta.visible { opacity: 1; transform: none; }
-    .btn {
-      padding: 0.8rem 1.9rem;
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      text-decoration: none;
-      border-radius: 2px;
-      transition: all 0.2s;
-    }
-    .btn-amber { background: var(--amber); color: var(--navy); }
-    .btn-amber:hover { background: var(--amber-lt); }
-    .btn-ghost { border: 1px solid rgba(255,255,255,0.3); color: rgba(255,255,255,0.8); }
-    .btn-ghost:hover { border-color: var(--amber); color: var(--amber); }
-    .scroll-hint {
-      position: absolute;
-      bottom: 2rem; left: 8vw;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 0.62rem;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.3);
-      opacity: 0;
-      transition: opacity 0.8s ease;
-      transition-delay: 2s;
-    }
-    .scroll-hint.visible { opacity: 1; }
-    .scroll-line {
-      width: 1px; height: 40px;
-      background: linear-gradient(to bottom, var(--amber), transparent);
-      animation: spulse 2.2s ease-in-out infinite;
-    }
-    @keyframes spulse { 0%,100%{opacity:0.3} 50%{opacity:1} }
-
-    /* ── STATS ── */
-    #stats {
-      background: var(--navy-2);
-      border-bottom: 1px solid var(--bd);
-      display: grid;
-      grid-template-columns: repeat(4,1fr);
-    }
-    .stat {
-      padding: 2rem 1rem;
-      text-align: center;
-      border-right: 1px solid var(--bd);
-    }
-    .stat:last-child { border-right: none; }
-    .stat-num {
-      display: block;
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 3.5rem;
-      line-height: 1;
-      color: var(--amber);
-    }
-    .stat-label {
-      margin-top: 0.3rem;
-      font-size: 0.72rem;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--ink-3);
-    }
-
-    /* ── SECTION UTILITIES ── */
-    .sec { padding: 3.5rem 8vw; }
-    .sec-dark { background: var(--navy); color: var(--white); }
-    .sec-white { background: var(--white); }
-    .sec-cream { background: var(--cream); }
-
-    .sec-kicker {
+    .nav-links {
       display: flex;
       align-items: center;
-      gap: 0.6rem;
-      margin-bottom: 0.5rem;
+      gap: 1.8rem;
+      list-style: none;
     }
-    .kl { width: 20px; height: 1px; background: var(--amber); }
-    .kt {
-      font-size: 0.68rem;
-      letter-spacing: 0.28em;
-      text-transform: uppercase;
-      color: var(--amber);
-    }
-    .sec-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(2.8rem, 5vw, 4.5rem);
-      line-height: 0.95;
-      margin-bottom: 2rem;
-    }
-
-    /* ── INTRO FEATURE — Studio shot + bio ── */
-    #intro {
-      display: grid;
-      grid-template-columns: 1.1fr 1fr;
-      gap: 0;
-    }
-    .intro-photo {
-      position: relative;
-      overflow: hidden;
-      min-height: 520px;
-    }
-    .intro-photo img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      object-position: center 30%;
-      display: block;
-      transition: transform 0.6s ease;
-    }
-    .intro-photo:hover img { transform: scale(1.03); }
-    .intro-photo-caption {
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      padding: 1rem 1.5rem;
-      background: linear-gradient(to top, rgba(5,13,26,0.9), transparent);
+    .nav-links a {
       font-size: 0.7rem;
+      font-weight: 600;
       letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: var(--amber);
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
     }
-    .intro-text {
-      background: var(--navy);
-      padding: 3.5rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-    .intro-text .sec-title { color: var(--white); }
-    .intro-text p {
-      font-size: 1rem;
-      line-height: 1.82;
-      color: rgba(255,255,255,0.7);
-      margin-bottom: 1.1rem;
-    }
-    .intro-text p:first-of-type {
-      font-size: 1.12rem;
-      color: var(--white);
-      font-weight: 500;
-    }
-    .intro-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-top: 1rem;
-    }
-    .intro-tag {
-      padding: 0.35rem 0.85rem;
-      border: 1px solid rgba(232,160,48,0.35);
-      border-radius: 2px;
-      font-size: 0.7rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--amber);
-    }
-
-    /* ── VIDEOS ── */
-    #videos { background: var(--cream); }
-    .video-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
-    }
-    .video-card {
-      background: var(--white);
-      border-radius: 4px;
-      overflow: hidden;
-      box-shadow: 0 2px 20px rgba(0,0,0,0.08);
-      border: 1px solid #ddd8cf;
-    }
-    .vc-label {
-      padding: 0.7rem 1.2rem;
-      font-size: 0.68rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--amber);
-      border-bottom: 1px solid #ddd8cf;
-      background: var(--cream);
+    .nav-links a:hover { color: var(--white); }
+    .nav-social {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-    }
-    .vc-label::before { content: '▶'; font-size: 0.5rem; }
-    .vw { position: relative; padding-bottom: 56.25%; height: 0; background: var(--navy); }
-    .vw iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
-    .vc-body { padding: 1.1rem 1.2rem 1.3rem; }
-    .vc-title { font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 0.5rem; }
-    .vc-desc { font-size: 0.92rem; color: var(--ink-2); line-height: 1.72; }
-    .vc-role {
-      display: inline-block;
-      margin-top: 0.75rem;
-      padding: 0.25rem 0.7rem;
-      background: rgba(232,160,48,0.1);
-      border: 1px solid rgba(232,160,48,0.3);
-      border-radius: 2px;
-      font-size: 0.66rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--amber);
-    }
-
-    /* ── PARALLAX ── */
-    .pb {
-      position: relative;
-      height: 50vh;
-      min-height: 360px;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-    }
-    .pb-bg {
-      position: absolute;
-      inset: -20%;
-      background-size: cover;
-      background-position: center;
-      will-change: transform;
-    }
-    .pb-bg::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: rgba(5,13,26,0.75);
-    }
-    #pb1 .pb-bg { background-image: url('assets/images/3.jpg'); background-position: center 35%; }
-    #pb2 .pb-bg { background-image: url('assets/images/6.jpg'); background-position: center 28%; }
-    .pb-content {
-      position: relative;
-      z-index: 2;
-      padding: 0 8vw;
-      max-width: 720px;
-    }
-    .pb-quote {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(1.6rem, 3.2vw, 2.6rem);
-      font-style: italic;
-      line-height: 1.35;
-      color: var(--white);
-    }
-    .pb-quote em { font-style: normal; color: var(--amber); }
-    .pb-attr {
-      margin-top: 1rem;
-      font-size: 0.72rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--amber);
-    }
-
-    /* ── AWARDS ── */
-    .awards-photos {
-      display: grid;
-      grid-template-columns: 1.15fr 1fr;
-      gap: 1.25rem;
-      margin-bottom: 1.75rem;
-    }
-    .af {
-      position: relative;
-      border-radius: 3px;
-      overflow: hidden;
-    }
-    .af img {
-      width: 100%;
-      display: block;
-      object-fit: cover;
-      transition: transform 0.4s ease;
-    }
-    .af:hover img { transform: scale(1.03); }
-    .af-cap {
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      padding: 0.75rem 1rem;
-      background: linear-gradient(to top, rgba(5,13,26,0.95), transparent);
-      font-size: 0.68rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--amber);
-    }
-    .awards-grid {
-      display: grid;
-      grid-template-columns: repeat(4,1fr);
-      gap: 1px;
-      background: var(--bd);
-      border: 1px solid var(--bd);
-      border-radius: 3px;
-      overflow: hidden;
-    }
-    .award-card {
-      background: var(--navy-3);
-      padding: 1.3rem;
-      transition: background 0.2s;
-    }
-    .award-card:hover { background: #142438; }
-    .award-icon { font-size: 1.3rem; margin-bottom: 0.5rem; }
-    .award-org {
-      font-size: 0.62rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--amber);
-      margin-bottom: 0.3rem;
-    }
-    .award-title { font-size: 0.92rem; font-weight: 600; color: var(--white); line-height: 1.35; }
-    .award-year { margin-top: 0.4rem; font-size: 0.72rem; color: var(--ink-3); }
-    .badge {
-      display: inline-block;
-      margin-top: 0.55rem;
-      padding: 0.2rem 0.55rem;
-      border-radius: 2px;
-      font-size: 0.6rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-    }
-    .bw { background: rgba(232,160,48,0.12); color: var(--amber); border: 1px solid rgba(232,160,48,0.3); }
-    .bn { background: rgba(100,150,220,0.1); color: #7ba8d4; border: 1px solid rgba(100,150,220,0.2); }
-
-    /* ── EXPERIENCE ── */
-    .exp-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3.5rem;
-      align-items: start;
-    }
-    .timeline { position: relative; padding-left: 1.25rem; }
-    .timeline::before {
-      content: '';
-      position: absolute;
-      left: 0; top: 0.5rem; bottom: 0;
-      width: 1px;
-      background: linear-gradient(to bottom, var(--amber), transparent);
-    }
-    .tl {
-      position: relative;
-      padding: 0 0 2.25rem 1.6rem;
-    }
-    .tl:last-child { padding-bottom: 0; }
-    .tl-dot {
-      position: absolute;
-      left: -0.32rem; top: 0.4rem;
-      width: 0.65rem; height: 0.65rem;
-      border-radius: 50%;
-      background: var(--amber);
-      border: 2px solid var(--cream);
-      box-shadow: 0 0 0 1px rgba(232,160,48,0.3);
-    }
-    .tl-date {
-      font-size: 0.68rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--amber);
-      margin-bottom: 0.28rem;
-    }
-    .tl-title { font-size: 1rem; font-weight: 700; color: var(--ink); margin-bottom: 0.15rem; }
-    .tl-org { font-size: 0.85rem; color: var(--ink-2); margin-bottom: 0.55rem; font-style: italic; }
-    .tl-desc { font-size: 0.95rem; color: var(--ink-2); line-height: 1.75; }
-    .tl-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.7rem; }
-    .tl-tag {
-      padding: 0.2rem 0.6rem;
-      background: rgba(232,160,48,0.08);
-      border: 1px solid rgba(232,160,48,0.25);
-      border-radius: 2px;
-      font-size: 0.64rem;
-      letter-spacing: 0.08em;
-      color: var(--amber);
-    }
-
-    .exp-photo-col {
-      position: sticky;
-      top: 7rem;
-    }
-    .exp-img {
-      width: 100%;
-      border-radius: 3px;
-      display: block;
-      margin-bottom: 1rem;
-      border: 1px solid #e2ddd6;
-    }
-    .exp-img-cap {
-      font-size: 0.72rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--ink-3);
-      margin-bottom: 1.25rem;
-    }
-
-    /* ── GALLERY FILMSTRIP ── */
-    #gallery {
-      background: var(--navy-2);
-      border-top: 1px solid var(--bd);
-      border-bottom: 1px solid var(--bd);
-      padding: 2.5rem 0;
-      overflow: hidden;
-    }
-    .gallery-header {
-      padding: 0 8vw;
-      margin-bottom: 1.25rem;
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-    }
-    .film-strip {
-      display: flex;
-      gap: 0.85rem;
-      width: max-content;
-      animation: filmroll 32s linear infinite;
-    }
-    .film-strip:hover { animation-play-state: paused; }
-    @keyframes filmroll { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
-    .film-frame {
-      flex-shrink: 0;
-      width: 300px;
-      height: 200px;
-      border-radius: 2px;
-      overflow: hidden;
-      border: 1px solid var(--bd);
-      cursor: pointer;
-    }
-    .film-frame img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      object-position: center top;
-      display: block;
-      transition: transform 0.4s, filter 0.3s;
-      filter: brightness(0.82) saturate(0.85);
-    }
-    .film-frame:hover img { transform: scale(1.06); filter: brightness(1) saturate(1.05); }
-
-    /* ── ABOUT ── */
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1.4fr;
-      gap: 4rem;
-      align-items: center;
-    }
-    .about-photo-wrap { position: relative; }
-    .about-photo {
-      width: 100%;
-      aspect-ratio: 3/4;
-      object-fit: cover;
-      object-position: top;
-      border-radius: 3px;
-      display: block;
-    }
-    .about-accent {
-      position: absolute;
-      top: 0.8rem; left: 0.8rem; right: -0.8rem; bottom: -0.8rem;
-      border: 1px solid rgba(232,160,48,0.25);
-      border-radius: 3px;
-      z-index: -1;
-    }
-    .about-text .sec-title { margin-bottom: 1.5rem; }
-    .about-text p {
-      font-size: 1rem;
-      line-height: 1.85;
-      color: var(--ink-2);
-      margin-bottom: 1.1rem;
-    }
-    .about-text p:first-of-type { font-size: 1.1rem; color: var(--ink); font-weight: 500; }
-    .about-text p:last-of-type { margin-bottom: 0; }
-
-    /* ── SKILLS ── */
-    .skills-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px,1fr));
       gap: 0.75rem;
     }
-    .skill-item {
+    .nav-social a {
       display: flex;
       align-items: center;
-      gap: 0.85rem;
-      padding: 1rem 1.1rem;
-      background: var(--white);
-      border: 1px solid #ddd8cf;
-      border-radius: 3px;
-      transition: border-color 0.2s, box-shadow 0.2s;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      color: var(--muted);
+      transition: color 0.2s;
     }
-    .skill-item:hover { border-color: var(--amber); box-shadow: 0 2px 12px rgba(232,160,48,0.1); }
-    .skill-icon { font-size: 1.15rem; flex-shrink: 0; }
-    .skill-name { font-size: 0.9rem; font-weight: 500; color: var(--ink-2); }
+    .nav-social a:hover { color: var(--pink); }
+    .nav-social svg { width: 17px; height: 17px; }
 
-    /* ── HONORS ── */
-    .honors-list { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.25rem; }
-    .honor-tag {
-      padding: 0.45rem 1.1rem;
-      border: 1px solid #ddd8cf;
-      border-radius: 100px;
-      font-size: 0.85rem;
-      color: var(--ink-2);
-      transition: border-color 0.2s, color 0.2s;
+    /* ── INTRO ── */
+    .intro {
+      padding: 120px 2.5rem 1.5rem;
+      max-width: 1280px;
+      margin: 0 auto;
     }
-    .honor-tag:hover { border-color: var(--amber); color: var(--amber); }
+    .intro-eyebrow {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--pink);
+      margin-bottom: 0.75rem;
+      opacity: 0;
+      animation: fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.2s forwards;
+    }
+    .intro-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3.5rem, 8vw, 7.5rem);
+      line-height: 0.9;
+      letter-spacing: 0.02em;
+      color: var(--white);
+      opacity: 0;
+      animation: fadeUp 0.9s cubic-bezier(0.16,1,0.3,1) 0.35s forwards;
+    }
+    .intro-name em {
+      color: var(--pink);
+      font-style: normal;
+    }
+    .intro-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(1rem, 1.8vw, 1.3rem);
+      color: var(--muted);
+      margin-top: 0.8rem;
+      opacity: 0;
+      animation: fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) 0.5s forwards;
+    }
 
-    /* ── FOOTER ── */
-    footer {
-      background: var(--navy);
-      border-top: 1px solid var(--bd);
-      padding: 4rem 8vw 2.5rem;
-      text-align: center;
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
-    .footer-name {
+
+    /* ── WORK GRID ── */
+    .work-section {
+      padding: 1rem 2.5rem 3rem;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    /* Pure equal 3-col grid — no featured */
+    .work-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+
+    /* Shared card styles */
+    .vcard {
+      position: relative;
+      overflow: hidden;
+      border-radius: 4px;
+      background: #000;
+      cursor: pointer;
+      aspect-ratio: 16/9;
+    }
+    .vcard video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s cubic-bezier(0.16,1,0.3,1);
+    }
+    .vcard:hover video {
+      transform: scale(1.03);
+    }
+
+    /* Overlay */
+    .vcard-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to top,
+        rgba(0,0,0,0.88) 0%,
+        rgba(0,0,0,0.3) 40%,
+        transparent 70%
+      );
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1.2rem;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .vcard:hover .vcard-overlay { opacity: 1; }
+
+    /* Always-visible bottom strip — none by default, hover reveals */
+
+    .vcard-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      background: var(--pink);
+      color: #0a0a0a;
+      font-size: 0.56rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      padding: 0.22rem 0.55rem;
+      border-radius: 2px;
+      margin-bottom: 0.5rem;
+      width: fit-content;
+    }
+    .vcard-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.06em;
+      color: var(--white);
+      line-height: 1.1;
+    }
+    .vcard-featured .vcard-title {
+      font-size: 1.6rem;
+    }
+    .vcard-desc {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.65);
+      margin-top: 0.3rem;
+      line-height: 1.45;
+      display: none;
+    }
+    .vcard:hover .vcard-desc { display: block; }
+
+    /* ── PORTRAIT / REELS CARDS ── */
+    .reels-section {
+      padding: 0 2.5rem 2rem;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+    .reels-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1rem;
+      padding-bottom: 0.7rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .reels-label span { color: var(--pink); }
+    .reels-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+    .vcard-portrait {
+      aspect-ratio: 9/16;
+    }
+
+    /* Play button */
+    .vcard-play {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.8);
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: rgba(232,137,154,0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.25s, transform 0.25s cubic-bezier(0.16,1,0.3,1);
+      pointer-events: none;
+    }
+    .vcard:hover .vcard-play {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    .vcard-play svg {
+      width: 20px;
+      height: 20px;
+      color: #0a0a0a;
+      margin-left: 3px;
+    }
+
+    /* ── VIDEO LIGHTBOX ── */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.92);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      backdrop-filter: blur(8px);
+    }
+    .lightbox.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .lightbox-inner {
+      width: min(900px, 94vw);
+      position: relative;
+    }
+    .lightbox-inner.portrait {
+      width: min(400px, 60vw);
+    }
+    .lightbox-inner video {
+      width: 100%;
+      display: block;
+      border-radius: 6px;
+      box-shadow: 0 0 80px rgba(232,137,154,0.2);
+    }
+    .lightbox-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem;
+      letter-spacing: 0.08em;
+      color: var(--white);
+      margin-top: 1rem;
+      padding: 0 0.2rem;
+    }
+    .lightbox-close {
+      position: absolute;
+      top: -3rem;
+      right: 0;
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: color 0.2s;
+      padding: 0.5rem;
+      min-height: 44px;
+    }
+    .lightbox-close:hover { color: var(--white); }
+    .lightbox-close svg { width: 16px; height: 16px; }
+
+    /* ── SECTION SHARED ── */
+    .sec {
+      padding: 4rem 2.5rem;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+    .sec-full {
+      padding: 4rem 0;
+      background: var(--surface);
+    }
+    .sec-full .sec {
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+    .sec-label {
       font-family: 'Bebas Neue', sans-serif;
       font-size: clamp(2.8rem, 6vw, 5.5rem);
       letter-spacing: 0.04em;
       color: var(--white);
-      margin-bottom: 0.35rem;
+      line-height: 1;
     }
-    .footer-sub {
+    .sec-label em { color: var(--pink); font-style: normal; }
+    .sec-sub {
       font-family: 'Cormorant Garamond', serif;
       font-style: italic;
       font-size: 1.1rem;
-      color: var(--ink-3);
-      margin-bottom: 2.25rem;
+      color: var(--muted);
+      margin-top: 0.4rem;
     }
-    .footer-links {
+    .sec-divider {
+      width: 44px;
+      height: 2px;
+      background: var(--pink);
+      margin-top: 1.1rem;
+    }
+    .sec-head {
+      margin-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 2rem;
+    }
+
+    /* ── CREDENTIALS STRIP ── */
+    .cred-strip {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+      padding: 0.9rem 0;
+    }
+    .cred-track {
       display: flex;
-      justify-content: center;
-      gap: 0.85rem;
-      margin-bottom: 2.5rem;
-      flex-wrap: wrap;
+      width: max-content;
+      animation: ticker 32s linear infinite;
     }
-    .footer-link {
-      padding: 0.7rem 1.5rem;
-      border: 1px solid var(--bd);
-      border-radius: 2px;
-      color: var(--ink-3);
-      text-decoration: none;
-      font-size: 0.78rem;
+    @keyframes ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+    .cred-item {
+      padding: 0 3rem;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted-2);
+      white-space: nowrap;
+    }
+    .cred-item strong { color: var(--muted); }
+    .cred-item::after { content: ' · '; color: var(--pink); opacity: 0.4; }
+
+    /* ── AWARDS ── */
+    /* Big stat row */
+    .award-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      margin-bottom: 3.5rem;
+    }
+    .award-stat {
+      background: var(--surface-2);
+      padding: 2.2rem 1.5rem;
+      text-align: center;
+      transition: background 0.25s;
+    }
+    .award-stat:hover { background: #1e1e1e; }
+    .award-stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3.5rem, 6vw, 5.5rem);
+      line-height: 1;
+      color: var(--pink);
+    }
+    .award-stat-lbl {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 0.5rem;
+      line-height: 1.4;
+    }
+
+    /* Photo strip */
+    .awards-photos {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.8rem;
+      margin-bottom: 3.5rem;
+    }
+    .aphoto {
+      position: relative;
+      overflow: hidden;
+      border-radius: 4px;
+      aspect-ratio: 16/10;
+    }
+    .aphoto img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(25%);
+      transition: transform 0.6s cubic-bezier(0.16,1,0.3,1), filter 0.4s;
+    }
+    .aphoto:hover img { transform: scale(1.04); filter: grayscale(0%); }
+    .aphoto-cap {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: linear-gradient(transparent, rgba(0,0,0,0.8));
+      padding: 1.2rem 0.8rem 0.6rem;
+      font-size: 0.63rem;
+      color: var(--off-white);
+      letter-spacing: 0.05em;
+    }
+
+    /* Category pills */
+    .award-cats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 3rem;
+    }
+    .award-cat {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--pink);
+      border-radius: 4px;
+      padding: 1.5rem 1.4rem;
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.16,1,0.3,1), border-color 0.25s;
+    }
+    .award-cat:hover { border-top-color: var(--pink-lt); }
+    .award-cat.visible { opacity: 1; transform: translateY(0); }
+    .award-cat-icon {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.2rem;
+      color: var(--pink);
+      line-height: 1;
+      margin-bottom: 0.6rem;
+    }
+    .award-cat-name {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.8rem;
+    }
+    .award-cat-items {
+      list-style: none;
+    }
+    .award-cat-items li {
+      font-size: 0.82rem;
+      color: var(--off-white);
+      padding: 0.35rem 0;
+      border-bottom: 1px solid var(--border);
+      line-height: 1.35;
+    }
+    .award-cat-items li:last-child { border-bottom: none; }
+    .award-cat-items li strong { color: var(--pink); }
+
+    /* ── NATAS BADGE ── */
+    .natas-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: rgba(232,137,154,0.08);
+      border: 1px solid rgba(232,137,154,0.3);
+      border-radius: 4px;
+      padding: 0.6rem 1rem;
+      margin-top: 1.5rem;
+    }
+    .natas-badge-icon {
+      width: 32px;
+      height: 32px;
+      flex-shrink: 0;
+    }
+    .natas-badge-text {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--pink-lt);
+      line-height: 1.4;
+    }
+    .natas-badge-text span {
+      display: block;
+      color: var(--muted);
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      text-transform: none;
+      font-size: 0.6rem;
+      margin-top: 0.1rem;
+    }
+
+    /* ── EXPERIENCE TIMELINE ── */
+    .exp-section {
+      background: var(--black);
+    }
+    .timeline {
+      position: relative;
+      padding-left: 2rem;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.5rem;
+      bottom: 0;
+      width: 1px;
+      background: var(--border);
+    }
+    .tl-item {
+      position: relative;
+      padding-bottom: 2.8rem;
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.16,1,0.3,1);
+    }
+    .tl-item:last-child { padding-bottom: 0; }
+    .tl-item.visible { opacity: 1; transform: translateY(0); }
+    .tl-dot {
+      position: absolute;
+      left: -2.35rem;
+      top: 0.4rem;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--pink);
+      border: 2px solid var(--black);
+      box-shadow: 0 0 0 1px var(--pink);
+    }
+    .tl-date {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--pink);
+      margin-bottom: 0.35rem;
+    }
+    .tl-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem;
+      letter-spacing: 0.06em;
+      color: var(--white);
+      line-height: 1.1;
+      margin-bottom: 0.2rem;
+    }
+    .tl-org {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 0.7rem;
+    }
+    .tl-desc {
+      font-size: 0.9rem;
+      color: var(--off-white);
+      line-height: 1.75;
+      max-width: 680px;
+    }
+    .tl-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 0.8rem;
+    }
+    .tl-tag {
+      font-size: 0.6rem;
+      font-weight: 700;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      transition: border-color 0.2s, color 0.2s;
+      color: var(--muted);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 0.2rem 0.55rem;
+      border-radius: 2px;
     }
-    .footer-link:hover { border-color: var(--amber); color: var(--amber); }
-    .footer-copy { font-size: 0.72rem; color: var(--ink-3); }
 
-    /* ── RESPONSIVE ── */
-    @media (max-width: 1000px) {
-      #intro { grid-template-columns: 1fr; }
-      .intro-photo { min-height: 320px; }
-      .video-grid { grid-template-columns: 1fr; }
-      .awards-photos { grid-template-columns: 1fr; }
-      .awards-grid { grid-template-columns: repeat(2,1fr); }
-      .exp-grid { grid-template-columns: 1fr; }
-      .exp-photo-col { position: static; order: -1; }
-      .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
-      .about-photo { aspect-ratio: 4/3; }
+    /* ── ABOUT ── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 5rem;
+      align-items: center;
     }
-    @media (max-width: 700px) {
-      #stats { grid-template-columns: repeat(2,1fr); }
-      .awards-grid { grid-template-columns: 1fr; }
-      nav { padding: 0.85rem 1.25rem; }
+    .about-p {
+      font-size: 1rem;
+      color: var(--off-white);
+      line-height: 1.82;
+      margin-bottom: 1.4rem;
+    }
+    .about-p:last-of-type { margin-bottom: 0; }
+    .about-p strong { color: var(--white); font-weight: 600; }
+    .about-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 2.5rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+    }
+    .stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.6rem;
+      color: var(--pink);
+      line-height: 1;
+    }
+    .stat-lbl {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 0.3rem;
+    }
+    .photo-frame {
+      position: relative;
+    }
+    .photo-frame::after {
+      content: '';
+      position: absolute;
+      top: 14px; left: 14px;
+      right: -14px; bottom: -14px;
+      border: 2px solid var(--pink);
+      border-radius: 4px;
+      opacity: 0.35;
+      transition: opacity 0.4s;
+    }
+    .photo-frame:hover::after { opacity: 0.7; }
+    .photo-frame img {
+      width: 100%;
+      display: block;
+      border-radius: 4px;
+      position: relative;
+      z-index: 1;
+      filter: grayscale(10%);
+      transition: filter 0.4s;
+    }
+    .photo-frame:hover img { filter: grayscale(0%); }
+
+    /* ── CONTACT ── */
+    .contact-center {
+      text-align: center;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+    .contact-hed {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 7vw, 6rem);
+      color: var(--white);
+      line-height: 1;
+      margin-bottom: 0.8rem;
+    }
+    .contact-hed em { color: var(--pink); font-style: normal; }
+    .contact-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.1rem;
+      color: var(--muted);
+      margin-bottom: 2.2rem;
+    }
+    .contact-btns {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.9rem;
+      justify-content: center;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.75rem 1.7rem;
+      border-radius: 3px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      min-height: 44px;
+      cursor: pointer;
+      border: none;
+    }
+    .btn svg { width: 15px; height: 15px; flex-shrink: 0; }
+    .btn-pink {
+      background: var(--pink);
+      color: #0a0a0a;
+    }
+    .btn-pink:hover {
+      background: var(--pink-lt);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(232,137,154,0.28);
+    }
+    .btn-outline {
+      background: transparent;
+      color: var(--off-white);
+      border: 1px solid var(--border);
+    }
+    .btn-outline:hover {
+      border-color: var(--pink);
+      color: var(--pink);
+      transform: translateY(-2px);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--black);
+      border-top: 1px solid var(--border);
+      padding: 1.8rem 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .footer-brand {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1rem;
+      letter-spacing: 0.1em;
+      color: var(--muted-2);
+    }
+    .footer-meta {
+      font-size: 0.65rem;
+      color: var(--muted-2);
+      letter-spacing: 0.08em;
+    }
+
+    /* ── PHOTO MARQUEE ── */
+    .photo-marquee {
+      background: var(--black);
+      overflow: hidden;
+      padding: 1.2rem 0;
+    }
+    .marquee-row {
+      overflow: hidden;
+      margin-bottom: 0.6rem;
+    }
+    .marquee-row:last-child { margin-bottom: 0; }
+    .marquee-track {
+      display: flex;
+      width: max-content;
+      gap: 0.7rem;
+      align-items: center;
+    }
+    .marquee-track-left  { animation: marqueeLeft  50s linear infinite; }
+    .marquee-track-right { animation: marqueeRight 50s linear infinite; }
+    .marquee-row:hover .marquee-track { animation-play-state: paused; }
+    @keyframes marqueeLeft  { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+    @keyframes marqueeRight { 0%{transform:translateX(-50%)} 100%{transform:translateX(0)} }
+    .marquee-img {
+      height: 210px;
+      width: auto;
+      aspect-ratio: auto;
+      object-fit: cover;
+      display: block;
+      border-radius: 3px;
+      flex-shrink: 0;
+      filter: grayscale(18%);
+      transition: filter 0.4s ease, transform 0.5s cubic-bezier(0.16,1,0.3,1);
+      cursor: default;
+    }
+    .marquee-img:hover { filter: grayscale(0%); transform: scale(1.03); }
+
+    /* ── MOBILE ── */
+    @media (max-width: 960px) {
+      .work-grid { grid-template-columns: repeat(2, 1fr); }
+      .reels-grid { grid-template-columns: repeat(3, 1fr); }
+      .award-stats { grid-template-columns: repeat(2, 1fr); }
+      .award-cats { grid-template-columns: 1fr; }
+      .awards-photos { grid-template-columns: repeat(2, 1fr); }
+      .about-grid { grid-template-columns: 1fr; }
+      .about-grid .photo-frame { order: -1; max-width: 320px; }
+    }
+    @media (max-width: 600px) {
+      nav { padding: 0 1.2rem; }
       .nav-links { display: none; }
-
-      /* Mobile vignette: heavier bottom fade to separate face from text */
-      .hero-vignette {
-        background:
-          radial-gradient(ellipse 60% 50% at 50% 35%, transparent 0%, rgba(5,13,26,0.2) 40%, rgba(5,13,26,0.8) 75%, rgba(5,13,26,0.97) 100%),
-          linear-gradient(to right, rgba(5,13,26,0.9) 0%, transparent 35%),
-          linear-gradient(to left, rgba(5,13,26,0.9) 0%, transparent 35%),
-          linear-gradient(to top, rgba(5,13,26,1) 0%, rgba(5,13,26,0.6) 25%, transparent 50%),
-          linear-gradient(to bottom, rgba(5,13,26,0.6) 0%, transparent 25%);
-      }
-
-      .hero-bg {
-        background-image: url('assets/images/centermobile.jpg') !important;
-        background-position: 50% 0% !important;
-        background-size: cover !important;
-        transform: none !important;
-      }
-      #hero {
-        align-items: flex-end;
-        padding-bottom: 0;
-      }
-      .hero-content {
-        max-width: 100%;
-        width: 100%;
-        padding: 1.5rem 6vw 3vh;
-        background: linear-gradient(to top, rgba(5,13,26,1) 0%, rgba(5,13,26,0.92) 80%, transparent 100%);
-      }
-      .hero-name {
-        font-size: clamp(3.5rem, 16vw, 5.5rem);
-      }
+      .intro { padding: 100px 1.2rem 2rem; }
+      .work-section { padding: 0.5rem 0.5rem 2rem; }
+      .reels-section { padding: 0 1.2rem 3rem; }
+      .work-grid { grid-template-columns: repeat(3, 1fr); gap: 0.35rem; }
+      .reels-grid { grid-template-columns: repeat(3, 1fr); gap: 0.35rem; }
+      .award-stats { grid-template-columns: repeat(2, 1fr); }
+      .awards-photos { grid-template-columns: 1fr; }
+      .sec { padding: 3rem 1.2rem; }
+      footer { flex-direction: column; gap: 0.5rem; text-align: center; }
     }
   </style>
 </head>
 <body>
 
-  <!-- TICKER -->
-  <div class="ticker-wrap">
-    <div class="ticker-label">Breaking</div>
-    <div class="ticker-track">
-      <span class="ticker-item">3x Regional Student Emmy Award Winner</span>
-      <span class="ticker-item">FSPA Best of the Best — Spring Digitals 2025</span>
-      <span class="ticker-item">STN National Convention 2nd Place</span>
-      <span class="ticker-item">FSPA All-Florida Awards 2024–2026</span>
-      <span class="ticker-item">STN Outstanding Achievement 2025</span>
-      <span class="ticker-item">FSPA Show Evaluation Gold 2026</span>
-      <span class="ticker-item">Distinguished Producer Award — RaiderVision</span>
-      <span class="ticker-item">4x Emmy Nominee 2025</span>
-      <span class="ticker-item">3x Regional Student Emmy Award Winner</span>
-      <span class="ticker-item">FSPA Best of the Best — Spring Digitals 2025</span>
-      <span class="ticker-item">STN National Convention 2nd Place</span>
-      <span class="ticker-item">FSPA All-Florida Awards 2024–2026</span>
-      <span class="ticker-item">STN Outstanding Achievement 2025</span>
-      <span class="ticker-item">FSPA Show Evaluation Gold 2026</span>
-      <span class="ticker-item">Distinguished Producer Award — RaiderVision</span>
-      <span class="ticker-item">4x Emmy Nominee 2025</span>
-    </div>
-  </div>
+  <!-- SCROLL PROGRESS -->
+  <div class="scroll-progress" id="scrollProgress"></div>
 
   <!-- NAV -->
   <nav id="mainNav">
-    <div class="nav-name">Lennon Spektor</div>
-    <ul class="nav-links">
-      <li><a href="#intro">About</a></li>
-      <li><a href="#videos">Work</a></li>
-      <li><a href="#awards">Awards</a></li>
-      <li><a href="#experience">Experience</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
+    <a href="#" class="nav-brand">Lennon Spektor</a>
+    <div class="nav-right">
+      <ul class="nav-links">
+        <li><a href="#work">Work</a></li>
+        <li><a href="#awards">Awards</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <div class="nav-social">
+        <a href="https://www.linkedin.com/in/lennonspektor/" target="_blank" rel="noopener" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        </a>
+        <a href="https://www.instagram.com/lennon_raidervision/" target="_blank" rel="noopener" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+        </a>
+      </div>
+    </div>
   </nav>
 
-  <!-- HERO -->
-  <section id="hero">
-    <div class="hero-bg" id="heroBg"></div>
-    <div class="hero-vignette"></div>
-    <div class="hero-content">
-      <div class="hero-kicker reveal visible">
-        <div class="kicker-line"></div>
-        <span class="kicker-text">Broadcast Journalist &nbsp;·&nbsp; Executive Producer</span>
-      </div>
-      <h1 class="hero-name" id="heroName">LENNON<br>SPEKTOR</h1>
-      <div class="hero-badge" id="heroBadge">★&nbsp; 3x Regional Student Emmy Award Winner</div>
-      <p class="hero-tagline" id="heroTagline">Gulliver Preparatory School &nbsp;·&nbsp; Miami Beach, FL</p>
-      <div class="hero-cta" id="heroCta">
-        <a href="#awards" class="btn btn-amber">View the Record</a>
-        <a href="#contact" class="btn btn-ghost">Connect</a>
-      </div>
-    </div>
-    <div class="scroll-hint" id="scrollHint">
-      <span>Scroll</span>
-      <div class="scroll-line"></div>
-    </div>
-  </section>
+  <!-- INTRO (compact) -->
+  <div class="intro">
+    <p class="intro-eyebrow">Broadcast Journalist · Executive Producer · Storyteller</p>
+    <h1 class="intro-name">Lennon<br><em>Spektor</em></h1>
+    <p class="intro-sub">Gulliver Preparatory School, Miami &nbsp;·&nbsp; RaiderVision &nbsp;·&nbsp; 3x NATAS Student Production Award Winner</p>
+  </div>
 
-  <!-- STATS -->
-  <div id="stats">
-    <div class="stat reveal reveal-delay-1">
-      <span class="stat-num" data-target="3">0</span>
-      <span class="stat-label">Emmy Wins</span>
-    </div>
-    <div class="stat reveal reveal-delay-2">
-      <span class="stat-num" data-target="7">0</span>
-      <span class="stat-label">Emmy Nominations</span>
-    </div>
-    <div class="stat reveal reveal-delay-3">
-      <span class="stat-num" data-target="10" data-suffix="+">0</span>
-      <span class="stat-label">Awards and Honors</span>
-    </div>
-    <div class="stat reveal reveal-delay-4">
-      <span class="stat-num" data-target="2" data-suffix="yrs">0</span>
-      <span class="stat-label">Executive Producing</span>
+  <!-- WORK GRID (immediately below name) -->
+  <div class="work-section" id="work">
+
+    <!-- Pure equal 3-col grid -->
+    <div class="work-grid">
+
+      <div class="vcard" data-vimeo="1180511798" data-title="My Reel">
+        <img id="vimeoThumb" src="" alt="My Reel" style="width:100%;height:100%;object-fit:cover;object-position:top center;display:block;">
+        <div class="vcard-overlay">
+          <div class="vcard-title">My Reel</div>
+          <p class="vcard-desc">Click to watch with sound.</p>
+        </div>
+        <div class="vcard-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></div>
+      </div>
+
+      <div class="vcard" data-src="assets/videos/fspa-sports-feature.mp4" data-title="First Place Sports Feature">
+        <video autoplay muted loop playsinline preload="auto">
+          <source src="assets/videos/fspa-sports-feature.mp4" type="video/mp4">
+        </video>
+        <div class="vcard-overlay">
+          <div class="vcard-badge">FSPA First Place</div>
+          <div class="vcard-title">First Place Sports Feature</div>
+          <p class="vcard-desc">Every shot, every edit, built under deadline pressure.</p>
+        </div>
+        <div class="vcard-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></div>
+      </div>
+
+      <div class="vcard" data-src="assets/videos/cutting-legacy.mp4" data-title="Cutting Legacy">
+        <video autoplay muted loop playsinline preload="auto">
+          <source src="assets/videos/cutting-legacy.mp4" type="video/mp4">
+        </video>
+        <div class="vcard-overlay">
+          <div class="vcard-title">Cutting Legacy</div>
+          <p class="vcard-desc">A barber whose craft is inseparable from his identity.</p>
+        </div>
+        <div class="vcard-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></div>
+      </div>
+
+      <div class="vcard" data-src="assets/videos/a-loss-to-a-legacy.mp4" data-title="A Loss to a Legacy">
+        <video autoplay muted loop playsinline preload="auto">
+          <source src="assets/videos/a-loss-to-a-legacy.mp4" type="video/mp4">
+        </video>
+        <div class="vcard-overlay">
+          <div class="vcard-badge">STN Challenge</div>
+          <div class="vcard-title">A Loss to a Legacy</div>
+          <p class="vcard-desc">The prompt was the loss I still feel today. This is the story I told.</p>
+        </div>
+        <div class="vcard-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></div>
+      </div>
+
+      <div class="vcard" data-src="assets/videos/feeding-change.mp4" data-title="Feeding Change">
+        <video autoplay muted loop playsinline preload="auto">
+          <source src="assets/videos/feeding-change.mp4" type="video/mp4">
+        </video>
+        <div class="vcard-overlay">
+          <div class="vcard-badge">FSPA All Florida 2026</div>
+          <div class="vcard-title">Feeding Change</div>
+          <p class="vcard-desc">Reshaping how Miami thinks about food access.</p>
+        </div>
+        <div class="vcard-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></div>
+      </div>
+
+      <div class="vcard" data-src="assets/videos/buddy-baseball.mp4" data-title="Buddy Baseball">
+        <video autoplay muted loop playsinline preload="auto">
+          <source src="assets/videos/buddy-baseball.mp4" type="video/mp4">
+        </video>
+        <div class="vcard-overlay">
+          <div class="vcard-badge">STN 2026</div>
+          <div class="vcard-title">Buddy Baseball</div>
+          <p class="vcard-desc">Crazy 8s Morning Show, Division 1. Prompt: Locked In.</p>
+        </div>
+        <div class="vcard-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></div>
+      </div>
+
+      <div class="vcard" data-src="assets/videos/welcome-to-gulliver.mov" data-title="Welcome to Gulliver">
+        <video autoplay muted loop playsinline preload="auto">
+          <source src="assets/videos/welcome-to-gulliver.mov" type="video/mp4">
+        </video>
+        <div class="vcard-overlay">
+          <div class="vcard-badge">FSPA Commercial</div>
+          <div class="vcard-title">Welcome to Gulliver</div>
+          <p class="vcard-desc">Concept, script, shoot, and edit: all me.</p>
+        </div>
+        <div class="vcard-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></div>
+      </div>
+
+      <div class="vcard" data-src="assets/videos/gymagination.mp4" data-title="Gymagination">
+        <video autoplay muted loop playsinline preload="auto">
+          <source src="assets/videos/gymagination.mp4" type="video/mp4">
+        </video>
+        <div class="vcard-overlay">
+          <div class="vcard-title">Gymagination</div>
+          <p class="vcard-desc">A feature story that aired on Raider305. I filmed and edited every frame.</p>
+        </div>
+        <div class="vcard-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></div>
+      </div>
+
+      <div class="vcard" data-src="assets/videos/melody-in-music.mp4" data-title="Melody in Music">
+        <video autoplay muted loop playsinline preload="auto">
+          <source src="assets/videos/melody-in-music.mp4" type="video/mp4">
+        </video>
+        <div class="vcard-overlay">
+          <div class="vcard-title">Melody in Music</div>
+          <p class="vcard-desc">Crazy 8s Practice 2026. I produced and anchored alongside my co-anchor Sofia.</p>
+        </div>
+        <div class="vcard-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></div>
+      </div>
+
+      <div class="vcard" data-src="assets/videos/patches-of-hope.mp4" data-title="Patches of Hope">
+        <video autoplay muted loop playsinline preload="auto">
+          <source src="assets/videos/patches-of-hope.mp4" type="video/mp4">
+        </video>
+        <div class="vcard-overlay">
+          <div class="vcard-title">Patches of Hope</div>
+          <p class="vcard-desc">A nonprofit changing lives one patch at a time.</p>
+        </div>
+        <div class="vcard-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></div>
+      </div>
+
+      <div class="vcard" data-src="assets/videos/steel-and-soul.mp4" data-title="Steel and Soul">
+        <video autoplay muted loop playsinline preload="auto">
+          <source src="assets/videos/steel-and-soul.mp4" type="video/mp4">
+        </video>
+        <div class="vcard-overlay">
+          <div class="vcard-badge">STN 2026 Honorable Mention</div>
+          <div class="vcard-title">Steel and Soul</div>
+          <p class="vcard-desc">STN 2026 Arts and Culture, Division 1. Prompt: Cultivate.</p>
+        </div>
+        <div class="vcard-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></div>
+      </div>
+
+      <div class="vcard" data-src="assets/videos/voice-of-the-raiders.mp4" data-title="Voice of the Raiders">
+        <video autoplay muted loop playsinline preload="auto">
+          <source src="assets/videos/voice-of-the-raiders.mp4" type="video/mp4">
+        </video>
+        <div class="vcard-overlay">
+          <div class="vcard-badge">FSPA Theme Package</div>
+          <div class="vcard-title">Voice of the Raiders</div>
+          <p class="vcard-desc">Produced, shot, and edited from scratch.</p>
+        </div>
+        <div class="vcard-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></div>
+      </div>
+
     </div>
   </div>
 
-  <!-- INTRO FEATURE -->
-  <div id="intro">
-    <div class="intro-photo reveal left">
-      <img src="assets/images/1.jpg" alt="Lennon Spektor conducting an interview at RaiderVision">
-      <div class="intro-photo-caption">RaiderVision Studio — Interviewing in the Newsroom</div>
-    </div>
-    <div class="intro-text">
-      <div class="sec-kicker"><div class="kl"></div><span class="kt">Who She Is</span></div>
-      <h2 class="sec-title reveal">The Journalist</h2>
-      <p class="reveal reveal-delay-1">Lennon Spektor is a broadcast journalist, executive producer, and storyteller based in Miami Beach, Florida. By the time most students are applying to college, Lennon had already won three Regional Student Emmy Awards — a distinction most professional journalists never achieve.</p>
-      <p class="reveal reveal-delay-2">At Gulliver Preparatory School, she serves as Executive Producer of Raider Rise and Chief of Feature News at RaiderVision, the school's award-winning broadcast program. She doesn't just appear on camera — she runs the entire operation. Editorial planning, production timelines, scripting, interviews, B-roll, final edits. Every week.</p>
-      <p class="reveal reveal-delay-3">Outside the studio, she teaches journalism to middle schoolers through Breakthrough Miami, translating professional newsroom standards into lessons that stick. She brings the same discipline to an e-commerce business she founded and continues to operate.</p>
-      <div class="intro-tags reveal reveal-delay-4">
-        <span class="intro-tag">Executive Producer</span>
-        <span class="intro-tag">Feature Storytelling</span>
-        <span class="intro-tag">Live Production</span>
-        <span class="intro-tag">Youth Mentor</span>
-        <span class="intro-tag">Entrepreneur</span>
+  <!-- REELS — portrait/vertical videos in proper 9:16 cards -->
+  <div class="reels-section">
+    <p class="reels-label">Reels &amp; <span>Shorts</span></p>
+    <div class="reels-grid">
+
+      <div class="vcard vcard-portrait" data-src="assets/videos/lennonrecap.mp4" data-title="My Recap Reel" data-portrait="true">
+        <video autoplay muted loop playsinline preload="auto">
+          <source src="assets/videos/lennonrecap.mp4" type="video/mp4">
+        </video>
+        <div class="vcard-overlay">
+          <div class="vcard-title">My Recap Reel</div>
+          <p class="vcard-desc">Click to watch with sound.</p>
+        </div>
+        <div class="vcard-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></div>
       </div>
+
+      <div class="vcard vcard-portrait" data-src="assets/videos/oliver-patch-project.mp4" data-title="Oliver Patch Project" data-portrait="true">
+        <video autoplay muted loop playsinline preload="auto">
+          <source src="assets/videos/oliver-patch-project.mp4" type="video/mp4">
+        </video>
+        <div class="vcard-overlay">
+          <div class="vcard-badge">Human Interest</div>
+          <div class="vcard-title">Oliver Patch Project</div>
+          <p class="vcard-desc">Some stories change the way you see the world.</p>
+        </div>
+        <div class="vcard-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></div>
+      </div>
+
+      <div class="vcard vcard-portrait" data-src="assets/videos/mojo-reed.mp4" data-title="Social Spot: Mojo Reed" data-portrait="true">
+        <video autoplay muted loop playsinline preload="auto">
+          <source src="assets/videos/mojo-reed.mp4" type="video/mp4">
+        </video>
+        <div class="vcard-overlay">
+          <div class="vcard-title">Social Spot: Mojo Reed</div>
+          <p class="vcard-desc">A spotlight on a local artist who deserved to be seen.</p>
+        </div>
+        <div class="vcard-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></div>
+      </div>
+
     </div>
   </div>
 
-  <!-- VIDEOS -->
-  <section class="sec" id="videos" style="background: var(--cream);">
-    <div class="sec-kicker"><div class="kl"></div><span class="kt">The Work</span></div>
-    <h2 class="sec-title reveal">Watch Her Stories</h2>
-    <div class="video-grid">
-      <div class="video-card reveal reveal-delay-1">
-        <div class="vc-label">Feature Story — Award-Winning</div>
-        <div class="vw">
-          <iframe src="https://www.youtube.com/embed/-n-GOaWGcHE"
-            title="Feature Story — Lennon Spektor, RaiderVision"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen loading="lazy"></iframe>
-        </div>
-        <div class="vc-body">
-          <div class="vc-title">Award-Winning Feature Story</div>
-          <div class="vc-desc">A community-centered feature story produced by Lennon for RaiderVision — recognized at the Suncoast Chapter Student Production Awards. From story development and source interviews to B-roll shooting and final edit, Lennon directed every phase of production. This is the kind of piece that earns Emmy nominations.</div>
-          <span class="vc-role">Producer / Reporter</span>
-        </div>
-      </div>
-      <div class="video-card reveal reveal-delay-2">
-        <div class="vc-label">Raider Rise — Morning Show</div>
-        <div class="vw">
-          <iframe src="https://www.youtube.com/embed/SYtbuuf0j3o"
-            title="Raider Rise Morning Show — Executive Producer Lennon Spektor"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen loading="lazy"></iframe>
-        </div>
-        <div class="vc-body">
-          <div class="vc-title">Raider Rise — Live Morning Show</div>
-          <div class="vc-desc">Raider Rise is RaiderVision's flagship weekly morning show, reaching the entire Gulliver Preparatory community. As Executive Producer, Lennon runs the show from the ground up — setting the editorial agenda, managing the team, coordinating production logistics, and ensuring every episode meets the standard that earned the program national recognition.</div>
-          <span class="vc-role">Executive Producer</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- PARALLAX 1 -->
-  <div class="pb" id="pb1">
-    <div class="pb-bg" id="pb1bg"></div>
-    <div class="pb-content">
-      <p class="pb-quote reveal">"She doesn't just report the story. She <em>builds</em> the entire broadcast."</p>
-      <p class="pb-attr reveal reveal-delay-2">RaiderVision — News for Students, by Students</p>
+  <!-- CREDENTIALS STRIP -->
+  <div class="cred-strip" aria-hidden="true">
+    <div class="cred-track">
+      <span class="cred-item"><strong>Executive Producer</strong> RaiderVision</span>
+      <span class="cred-item"><strong>Chief of Feature News</strong> RaiderVision</span>
+      <span class="cred-item"><strong>Vice President</strong> Jewish Student Union</span>
+      <span class="cred-item"><strong>Journalism Instructor</strong> Breakthrough Miami</span>
+      <span class="cred-item"><strong>Media Director</strong> Camp Wayne for Girls</span>
+      <span class="cred-item"><strong>3x NATAS Award Winner</strong> NATAS 2025</span>
+      <span class="cred-item"><strong>Broadcast Excellence</strong> STN 2026</span>
+      <span class="cred-item"><strong>Best of the Best</strong> FSPA 2025</span>
+      <span class="cred-item"><strong>Executive Producer</strong> RaiderVision</span>
+      <span class="cred-item"><strong>Chief of Feature News</strong> RaiderVision</span>
+      <span class="cred-item"><strong>Vice President</strong> Jewish Student Union</span>
+      <span class="cred-item"><strong>Journalism Instructor</strong> Breakthrough Miami</span>
+      <span class="cred-item"><strong>Media Director</strong> Camp Wayne for Girls</span>
+      <span class="cred-item"><strong>3x NATAS Award Winner</strong> NATAS 2025</span>
+      <span class="cred-item"><strong>Broadcast Excellence</strong> STN 2026</span>
+      <span class="cred-item"><strong>Best of the Best</strong> FSPA 2025</span>
     </div>
   </div>
 
   <!-- AWARDS -->
-  <section class="sec sec-dark" id="awards">
-    <div class="sec-kicker"><div class="kl"></div><span class="kt">Recognition</span></div>
-    <h2 class="sec-title reveal">The Record</h2>
-    <div class="awards-photos">
-      <div class="af reveal reveal-delay-1">
-        <img src="assets/images/7.jpg" alt="STN Broadcast Excellence Award ceremony" style="aspect-ratio:16/10; object-position: center 15%;">
-        <div class="af-cap">STN Broadcast Excellence Award — Student Television Network National Convention</div>
+  <div class="sec-full">
+    <div class="sec" id="awards">
+      <div class="sec-head reveal">
+        <div class="sec-label">The <em>Record</em></div>
+        <p class="sec-sub">Three years. Every award earned in competition.</p>
+        <div class="sec-divider"></div>
       </div>
-      <div class="af reveal reveal-delay-2">
-        <img src="assets/images/12.jpg" alt="Emmy Awards — Bill Cosford Cinema, University of Miami" style="aspect-ratio:16/10; object-position: center 30%;">
-        <div class="af-cap">Suncoast Student Emmy Awards — Bill Cosford Cinema, University of Miami</div>
-      </div>
-    </div>
-    <div class="awards-grid">
-      <div class="award-card reveal reveal-delay-1">
-        <div class="award-icon">🏆</div>
-        <div class="award-org">NATAS — Regional Student Emmy</div>
-        <div class="award-title">3x Emmy Award Winner</div>
-        <div class="award-year">2025</div>
-        <span class="badge bw">Winner</span>
-      </div>
-      <div class="award-card reveal reveal-delay-2">
-        <div class="award-icon">🌟</div>
-        <div class="award-org">NATAS — Regional Student Emmy</div>
-        <div class="award-title">4x Emmy Award Nominee</div>
-        <div class="award-year">2025</div>
-        <span class="badge bn">Nominee</span>
-      </div>
-      <div class="award-card reveal reveal-delay-3">
-        <div class="award-icon">🥇</div>
-        <div class="award-org">FSPA</div>
-        <div class="award-title">Best of the Best — Spring Digitals</div>
-        <div class="award-year">2025</div>
-        <span class="badge bw">Best of Best</span>
-      </div>
-      <div class="award-card reveal reveal-delay-4">
-        <div class="award-icon">🎖️</div>
-        <div class="award-org">FSPA</div>
-        <div class="award-title">Multiple All-Florida Awards</div>
-        <div class="award-year">2024–2026</div>
-        <span class="badge bw">All-Florida</span>
-      </div>
-      <div class="award-card reveal reveal-delay-1">
-        <div class="award-icon">🥈</div>
-        <div class="award-org">STN National Convention</div>
-        <div class="award-title">2nd Place — Crazy 8 Morning Show</div>
-        <div class="award-year">2025</div>
-        <span class="badge bn">2nd Place National</span>
-      </div>
-      <div class="award-card reveal reveal-delay-2">
-        <div class="award-icon">⭐</div>
-        <div class="award-org">STN Show Evaluation</div>
-        <div class="award-title">Outstanding Achievement</div>
-        <div class="award-year">2025</div>
-        <span class="badge bw">Outstanding</span>
-      </div>
-      <div class="award-card reveal reveal-delay-3">
-        <div class="award-icon">🥇</div>
-        <div class="award-org">FSPA Show Evaluation</div>
-        <div class="award-title">Gold Award</div>
-        <div class="award-year">2026</div>
-        <span class="badge bw">Gold</span>
-      </div>
-      <div class="award-card reveal reveal-delay-4">
-        <div class="award-icon">🎬</div>
-        <div class="award-org">RaiderVision</div>
-        <div class="award-title">Distinguished Producer Award</div>
-        <div class="award-year">2024–2025</div>
-        <span class="badge bw">Distinguished</span>
-      </div>
-    </div>
-  </section>
 
-  <!-- PARALLAX 2 -->
-  <div class="pb" id="pb2">
-    <div class="pb-bg" id="pb2bg"></div>
-    <div class="pb-content">
-      <p class="pb-quote reveal">From the studio to the sideline — she goes where the <em>story</em> is.</p>
-      <p class="pb-attr reveal reveal-delay-2">Field Reporter &nbsp;·&nbsp; RaiderVision</p>
+      <!-- NATAS badge -->
+      <div class="natas-badge reveal">
+        <svg class="natas-badge-icon" viewBox="0 0 48 48" fill="none">
+          <circle cx="24" cy="24" r="22" stroke="#e8899a" stroke-width="2" fill="rgba(232,137,154,0.08)"/>
+          <text x="24" y="20" text-anchor="middle" font-family="'Bebas Neue', sans-serif" font-size="9" fill="#e8899a" letter-spacing="1">NATAS</text>
+          <text x="24" y="30" text-anchor="middle" font-family="'Bebas Neue', sans-serif" font-size="7" fill="#f4b8c6" letter-spacing="0.5">STUDENT PRODUCTION</text>
+          <polygon points="24,33 26,39 32,39 27,43 29,49 24,45 19,49 21,43 16,39 22,39" fill="#e8899a" transform="scale(0.6) translate(16,4)"/>
+        </svg>
+        <div class="natas-badge-text">
+          National Academy of Television Arts and Sciences
+          <span>National Student Production Awards (NSPA) · Suncoast Chapter</span>
+        </div>
+      </div>
+
+      <!-- Big stat numbers — scannable in 5 seconds -->
+      <div class="award-stats reveal">
+        <div class="award-stat">
+          <div class="award-stat-num" data-count="3">0</div>
+          <div class="award-stat-lbl">NATAS Student<br>Production Awards</div>
+        </div>
+        <div class="award-stat">
+          <div class="award-stat-num" data-count="4">0</div>
+          <div class="award-stat-lbl">NATAS<br>Nominations</div>
+        </div>
+        <div class="award-stat">
+          <div class="award-stat-num" data-count="15">0</div>
+          <div class="award-stat-lbl">FSPA<br>Awards</div>
+        </div>
+        <div class="award-stat">
+          <div class="award-stat-num" data-count="30">0</div>
+          <div class="award-stat-lbl">Total Awards<br>and Honors</div>
+        </div>
+      </div>
+
+      <!-- Award photos -->
+      <div class="awards-photos">
+        <div class="aphoto reveal d1">
+          <img src="assets/images/C1BBB334-0BBE-4BC9-99F8-BDB6E2A51278.jpeg" alt="Lennon Spektor speaking at awards ceremony" loading="lazy">
+          <div class="aphoto-cap">STN Broadcast Excellence Award · Superior in Scholastic Broadcast News</div>
+        </div>
+        <div class="aphoto reveal d2">
+          <img src="assets/images/12.jpg" alt="NATAS Suncoast Student Production Awards" loading="lazy">
+          <div class="aphoto-cap">NATAS Suncoast Student Production Awards · Bill Cosford Cinema, University of Miami</div>
+        </div>
+        <div class="aphoto reveal d3">
+          <img src="assets/images/11.jpg" alt="STN Excellence Awards 2025" loading="lazy">
+          <div class="aphoto-cap">STN Excellence Awards 2025</div>
+        </div>
+      </div>
+
+      <!-- Category breakdown — 3 pillars -->
+      <div class="award-cats">
+        <div class="award-cat">
+          <div class="award-cat-icon">3×</div>
+          <div class="award-cat-name">NATAS Student Production Awards</div>
+          <ul class="award-cat-items">
+            <li><strong>3 wins</strong> NATAS Student Production Award 2025</li>
+            <li><strong>4 nominations</strong> NATAS Student Production Award 2025</li>
+          </ul>
+        </div>
+        <div class="award-cat">
+          <div class="award-cat-icon">15+</div>
+          <div class="award-cat-name">FSPA Awards</div>
+          <ul class="award-cat-items">
+            <li><strong>Best of the Best</strong> Spring Digitals 2025</li>
+            <li><strong>Gold Award</strong> Show Evaluation 2026</li>
+            <li><strong>First Place</strong> D6 Quick Turn 2024</li>
+            <li><strong>All Florida ×8</strong> across 3 years</li>
+            <li><strong>Excellent</strong> Spring Digitals 2025</li>
+          </ul>
+        </div>
+        <div class="award-cat">
+          <div class="award-cat-icon">10+</div>
+          <div class="award-cat-name">STN Awards</div>
+          <ul class="award-cat-items">
+            <li><strong>Superior</strong> Broadcast Excellence 2026</li>
+            <li><strong>Outstanding Achievement</strong> Show Evaluation 2025</li>
+            <li><strong>Second Place</strong> Crazy 8 Morning Show 2024</li>
+            <li><strong>Second Place</strong> STN Challenge 2025</li>
+            <li><strong>3× Honorable Mention</strong> 2025 and 2026</li>
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- EXPERIENCE -->
-  <section class="sec sec-white" id="experience">
-    <div class="sec-kicker"><div class="kl"></div><span class="kt">The Newsroom</span></div>
-    <h2 class="sec-title reveal">Experience</h2>
-    <div class="exp-grid">
+  <!-- PHOTO MARQUEE — dual direction scrolling strips -->
+  <div class="photo-marquee" aria-hidden="true">
+
+    <!-- Row 1: Award & ceremony photos — scrolls LEFT -->
+    <div class="marquee-row">
+      <div class="marquee-track marquee-track-left">
+        <img class="marquee-img" src="assets/images/EC6C9DD4-E633-42E3-B597-22A31584CD14_1_105_c.jpeg" alt="">
+        <img class="marquee-img" src="assets/images/C1BBB334-0BBE-4BC9-99F8-BDB6E2A51278.jpeg" alt="">
+        <img class="marquee-img" src="assets/images/1B615985-EF4C-42EF-9019-CC4C66D294E8_1_105_c.jpeg" alt="">
+        <img class="marquee-img" src="assets/images/28E8C74F-77CE-46A3-9228-042F432356EF_1_105_c.jpeg" alt="">
+        <img class="marquee-img" src="assets/images/35BC72E9-2A77-4714-94BD-FA50F8BF2287_1_105_c.jpeg" alt="">
+        <img class="marquee-img" src="assets/images/92CC14C0-BEB8-4BE5-BC1E-305ADC0ADB52_1_105_c.jpeg" alt="">
+        <img class="marquee-img" src="assets/images/5.jpg" alt="">
+        <img class="marquee-img" src="assets/images/11.jpg" alt="">
+        <img class="marquee-img" src="assets/images/12.jpg" alt="">
+        <img class="marquee-img" src="assets/images/EC6C9DD4-E633-42E3-B597-22A31584CD14_1_105_c.jpeg" alt="">
+        <img class="marquee-img" src="assets/images/C1BBB334-0BBE-4BC9-99F8-BDB6E2A51278.jpeg" alt="">
+        <img class="marquee-img" src="assets/images/1B615985-EF4C-42EF-9019-CC4C66D294E8_1_105_c.jpeg" alt="">
+        <img class="marquee-img" src="assets/images/28E8C74F-77CE-46A3-9228-042F432356EF_1_105_c.jpeg" alt="">
+        <img class="marquee-img" src="assets/images/35BC72E9-2A77-4714-94BD-FA50F8BF2287_1_105_c.jpeg" alt="">
+        <img class="marquee-img" src="assets/images/92CC14C0-BEB8-4BE5-BC1E-305ADC0ADB52_1_105_c.jpeg" alt="">
+        <img class="marquee-img" src="assets/images/5.jpg" alt="">
+        <img class="marquee-img" src="assets/images/11.jpg" alt="">
+        <img class="marquee-img" src="assets/images/12.jpg" alt="">
+      </div>
+    </div>
+
+    <!-- Row 2: On-set & working photos — scrolls RIGHT -->
+    <div class="marquee-row">
+      <div class="marquee-track marquee-track-right">
+        <img class="marquee-img" src="assets/images/1.jpg" alt="">
+        <img class="marquee-img" src="assets/images/3.jpg" alt="">
+        <img class="marquee-img" src="assets/images/9.jpg" alt="">
+        <img class="marquee-img" src="assets/images/10.jpg" alt="">
+        <img class="marquee-img" src="assets/images/0A3CC449-E2B4-4CCA-8681-DB9C76854B87_1_105_c.jpeg" alt="">
+        <img class="marquee-img" src="assets/images/4E055C8E-314E-46A1-B371-8639AC53FFA7_1_105_c.jpeg" alt="">
+        <img class="marquee-img" src="assets/images/768A4D93-B9BC-472F-8F7D-17483E4FE2D2_1_105_c.jpeg" alt="">
+        <img class="marquee-img" src="assets/images/9A94DFE3-BDF6-473C-9CA4-49D1EC14CFA7_1_105_c.jpeg" alt="">
+        <img class="marquee-img" src="assets/images/9F67BE09-6926-43EA-90D6-112AD0845199_1_105_c.jpeg" alt="">
+        <img class="marquee-img" src="assets/images/AC25C8D1-C40B-447F-8BF3-6CDA28085EE2_4_5005_c.jpeg" alt="">
+        <img class="marquee-img" src="assets/images/C7C65BD0-2489-4403-B25F-3A5607A197E0_1_105_c.jpeg" alt="">
+        <img class="marquee-img" src="assets/images/312480FC-ABC8-4AE0-89D9-3052A14259D4.jpeg" alt="">
+        <img class="marquee-img" src="assets/images/2.jpg" alt="">
+        <img class="marquee-img" src="assets/images/1.jpg" alt="">
+        <img class="marquee-img" src="assets/images/3.jpg" alt="">
+        <img class="marquee-img" src="assets/images/9.jpg" alt="">
+        <img class="marquee-img" src="assets/images/10.jpg" alt="">
+        <img class="marquee-img" src="assets/images/0A3CC449-E2B4-4CCA-8681-DB9C76854B87_1_105_c.jpeg" alt="">
+        <img class="marquee-img" src="assets/images/4E055C8E-314E-46A1-B371-8639AC53FFA7_1_105_c.jpeg" alt="">
+        <img class="marquee-img" src="assets/images/768A4D93-B9BC-472F-8F7D-17483E4FE2D2_1_105_c.jpeg" alt="">
+        <img class="marquee-img" src="assets/images/9A94DFE3-BDF6-473C-9CA4-49D1EC14CFA7_1_105_c.jpeg" alt="">
+        <img class="marquee-img" src="assets/images/9F67BE09-6926-43EA-90D6-112AD0845199_1_105_c.jpeg" alt="">
+        <img class="marquee-img" src="assets/images/AC25C8D1-C40B-447F-8BF3-6CDA28085EE2_4_5005_c.jpeg" alt="">
+        <img class="marquee-img" src="assets/images/C7C65BD0-2489-4403-B25F-3A5607A197E0_1_105_c.jpeg" alt="">
+        <img class="marquee-img" src="assets/images/312480FC-ABC8-4AE0-89D9-3052A14259D4.jpeg" alt="">
+        <img class="marquee-img" src="assets/images/2.jpg" alt="">
+      </div>
+    </div>
+
+  </div>
+
+  <!-- EXPERIENCE TIMELINE -->
+  <div class="sec-full">
+    <div class="sec" id="experience">
+      <div class="sec-head reveal">
+        <div class="sec-label">The <em>Work</em></div>
+        <p class="sec-sub">Behind the camera, in the newsroom, and in the classroom.</p>
+        <div class="sec-divider"></div>
+      </div>
+
       <div class="timeline">
-        <div class="tl reveal">
+
+        <div class="tl-item">
           <div class="tl-dot"></div>
-          <div class="tl-date">2024 — Present</div>
-          <div class="tl-title">Executive Producer and Chief of Feature News</div>
-          <div class="tl-org">RaiderVision, Gulliver Preparatory School</div>
-          <div class="tl-desc">Leads the full production cycle for Raider Rise — RaiderVision's flagship weekly broadcast. Manages editorial planning, story assignments, production timelines, and team coordination for a staff of student journalists. Oversees scripting, source interviews, B-roll acquisition, and final edits for both competition submissions and school-wide broadcasts. Recognized with the Distinguished Producer Award for exceptional leadership and consistent show quality. Her feature work has earned recognition at the state and national level from NATAS, FSPA, and STN.</div>
+          <div class="tl-date">2023 to Present</div>
+          <div class="tl-title">Executive Producer, Raider Rise</div>
+          <div class="tl-org">RaiderVision · Gulliver Preparatory School, Miami</div>
+          <p class="tl-desc">I run RaiderVision's flagship weekly morning show from the ground up. That means setting the editorial agenda, managing the team, coordinating production logistics, and making sure every episode clears the standard that earned this program national recognition. I do not just appear on camera. I own the entire operation: scripting, interviews, B-roll direction, and final edit, every single week.</p>
           <div class="tl-tags">
             <span class="tl-tag">Executive Producer</span>
             <span class="tl-tag">Editorial Planning</span>
-            <span class="tl-tag">Team Leadership</span>
-            <span class="tl-tag">Competition Submissions</span>
+            <span class="tl-tag">Team Management</span>
+            <span class="tl-tag">Post Production</span>
           </div>
         </div>
-        <div class="tl reveal">
+
+        <div class="tl-item">
           <div class="tl-dot"></div>
-          <div class="tl-date">2024 — Present</div>
+          <div class="tl-date">2023 to Present</div>
+          <div class="tl-title">Chief of Feature News</div>
+          <div class="tl-org">RaiderVision · Gulliver Preparatory School, Miami</div>
+          <p class="tl-desc">I lead one of RaiderVision's feature news teams, guiding reporters from story development through final edit. That means deciding which stories we pursue, conducting source interviews, directing B-roll, and owning every phase of production for our team. The work has been recognized by FSPA, STN, and NATAS at the regional level.</p>
+          <div class="tl-tags">
+            <span class="tl-tag">Feature Journalism</span>
+            <span class="tl-tag">Story Development</span>
+            <span class="tl-tag">Source Interviews</span>
+            <span class="tl-tag">Award Winning</span>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-date">2024 to Present</div>
           <div class="tl-title">Journalism Instructor</div>
-          <div class="tl-org">Breakthrough Miami</div>
-          <div class="tl-desc">Teaches weekend journalism classes to middle-school students as part of Breakthrough Miami's academic enrichment program. Curriculum covers storytelling fundamentals, ethical reporting, interview technique, and on-camera presentation. Develops lesson plans from scratch that translate professional newsroom standards into engaging, accessible instruction for students who have never stepped in front of a camera.</div>
+          <div class="tl-org">Breakthrough Miami · Weekend Enrichment Program</div>
+          <p class="tl-desc">I teach feature storytelling and human interest journalism to middle school students on weekends. My curriculum covers storytelling fundamentals, ethical reporting, interview technique, and on-camera presentation. I build lesson plans from scratch that translate professional newsroom standards into engaging, accessible instruction for students who have never stepped in front of a camera. Most of them have never considered journalism as a possibility. That changes after class.</p>
           <div class="tl-tags">
             <span class="tl-tag">Curriculum Development</span>
-            <span class="tl-tag">Youth Mentorship</span>
-            <span class="tl-tag">Media Literacy</span>
+            <span class="tl-tag">Teaching</span>
+            <span class="tl-tag">Mentorship</span>
+            <span class="tl-tag">Breakthrough Miami</span>
           </div>
         </div>
-        <div class="tl reveal">
+
+        <div class="tl-item">
           <div class="tl-dot"></div>
-          <div class="tl-date">June 2025</div>
-          <div class="tl-title">Broadcast Counselor</div>
-          <div class="tl-org">RaiderVision Summer Camp</div>
-          <div class="tl-desc">Led hands-on broadcast workshops for RaiderVision's summer program, teaching scripting, camera operation, and editing fundamentals. Guided student teams from concept through production to a finished broadcast package, replicating the professional workflow used at RaiderVision.</div>
+          <div class="tl-date">Summer 2026</div>
+          <div class="tl-title">Media Director</div>
+          <div class="tl-org">Camp Wayne for Girls</div>
+          <p class="tl-desc">This summer I am leading all media and content creation across the camp. I produce and direct video content, manage the camp's social storytelling, and teach campers how to create compelling content. It is the same discipline I bring to the newsroom, applied to a new environment.</p>
+          <div class="tl-tags">
+            <span class="tl-tag">Media Direction</span>
+            <span class="tl-tag">Content Creation</span>
+            <span class="tl-tag">Social Media</span>
+          </div>
         </div>
-        <div class="tl reveal">
+
+        <div class="tl-item">
           <div class="tl-dot"></div>
-          <div class="tl-date">Summer 2024</div>
-          <div class="tl-title">Student Participant</div>
-          <div class="tl-org">Vogue Summer School, New York City</div>
-          <div class="tl-desc">Selected to attend Vogue's intensive entrepreneurship and business strategy program in New York City. Developed a startup concept and pitched it directly to Vogue Business professionals — applying the same strategic thinking she brings to her own e-commerce venture to a new industry context.</div>
+          <div class="tl-date">2023 to Present</div>
+          <div class="tl-title">Vice President</div>
+          <div class="tl-org">Jewish Student Union · Gulliver Preparatory School</div>
+          <p class="tl-desc">I serve as Vice President of the Jewish Student Union, helping organize programming, community events, and campus initiatives. Leadership outside the newsroom is part of who I am.</p>
+          <div class="tl-tags">
+            <span class="tl-tag">Student Leadership</span>
+            <span class="tl-tag">Community</span>
+          </div>
         </div>
-        <div class="tl reveal">
+
+        <div class="tl-item">
           <div class="tl-dot"></div>
-          <div class="tl-date">Ongoing</div>
+          <div class="tl-date">2022 to Present</div>
           <div class="tl-title">Founder and Operator</div>
-          <div class="tl-org">SillyFeet &nbsp;·&nbsp; E-Commerce</div>
-          <div class="tl-desc">Founded and continues to run a profitable e-commerce business, overseeing product strategy, brand identity, digital marketing, and customer operations. Running a real business as a teenager demonstrates the entrepreneurial independence and self-direction that defines everything she does.</div>
+          <div class="tl-org">E-Commerce Business</div>
+          <p class="tl-desc">I founded and continue to run my own e-commerce business alongside everything else. Building something from the ground up while maintaining a full academic and extracurricular schedule has taught me more about discipline and resourcefulness than any class.</p>
           <div class="tl-tags">
             <span class="tl-tag">Entrepreneurship</span>
-            <span class="tl-tag">Brand Strategy</span>
-            <span class="tl-tag">Digital Marketing</span>
+            <span class="tl-tag">Operations</span>
+            <span class="tl-tag">Self-Directed</span>
           </div>
         </div>
-      </div>
-      <div class="exp-photo-col">
-        <img src="assets/images/9.jpg" alt="Lennon Spektor in the newsroom" class="exp-img reveal right">
-        <div class="exp-img-cap reveal right reveal-delay-1">RaiderVision Newsroom — Editorial Planning Session</div>
-        <img src="assets/images/2.jpg" alt="Lennon Spektor conducting an interview" class="exp-img reveal right reveal-delay-2" style="margin-top:0;">
-        <div class="exp-img-cap reveal right reveal-delay-3">On-Camera Interview — RaiderVision Feature Production</div>
-      </div>
-    </div>
-  </section>
 
-  <!-- GALLERY FILMSTRIP -->
-  <section id="gallery">
-    <div class="gallery-header">
-      <div class="kl"></div>
-      <span class="kt">Behind the Lens</span>
+      </div>
     </div>
-    <div class="film-strip">
-      <div class="film-frame"><img src="assets/images/3.jpg" alt="Studio production crew"></div>
-      <div class="film-frame"><img src="assets/images/5.jpg" alt="STN stage" style="object-position: center 20%;"></div>
-      <div class="film-frame"><img src="assets/images/7.jpg" alt="STN award" style="object-position: center 15%;"></div>
-      <div class="film-frame"><img src="assets/images/8.jpg" alt="Team at STN" style="object-position: center 25%;"></div>
-      <div class="film-frame"><img src="assets/images/10.jpg" alt="Lennon Spektor at broadcast desk" style="object-position: 40% 55%;"></div>
-      <div class="film-frame"><img src="assets/images/11.jpg" alt="STN Excellence Awards 2025"></div>
-      <div class="film-frame"><img src="assets/images/3.jpg" alt="Studio production crew"></div>
-      <div class="film-frame"><img src="assets/images/5.jpg" alt="STN stage" style="object-position: center 20%;"></div>
-      <div class="film-frame"><img src="assets/images/7.jpg" alt="STN award" style="object-position: center 15%;"></div>
-      <div class="film-frame"><img src="assets/images/8.jpg" alt="Team at STN" style="object-position: center 25%;"></div>
-      <div class="film-frame"><img src="assets/images/10.jpg" alt="Lennon Spektor at broadcast desk" style="object-position: 40% 55%;"></div>
-      <div class="film-frame"><img src="assets/images/11.jpg" alt="STN Excellence Awards 2025"></div>
-    </div>
-  </section>
+  </div>
 
   <!-- ABOUT -->
-  <section class="sec sec-cream" id="about">
+  <div class="sec" id="about">
+    <div class="sec-head reveal">
+      <div class="sec-label">About <em>Me</em></div>
+      <div class="sec-divider"></div>
+    </div>
     <div class="about-grid">
-      <div class="about-photo-wrap reveal left">
-        <img src="assets/images/lennon.jpg" alt="Lennon Spektor" class="about-photo">
-        <div class="about-accent"></div>
+      <div class="reveal left">
+        <p class="about-p">I am a broadcast journalist, executive producer, and storyteller based in Miami, Florida. I am a junior at <strong>Gulliver Preparatory School</strong>, enrolled in the Digital Mass Media and Business and Entrepreneurship signature programs.</p>
+        <p class="about-p">At <strong>RaiderVision</strong>, I serve as Executive Producer of Raider Rise and Chief of one of the feature news teams. I do not just appear on camera. I run the operation: editorial planning, production timelines, scripting, interviews, B-roll, and final edits, every week.</p>
+        <p class="about-p">I have won <strong>three NATAS Student Production Awards</strong>, a distinction most professional journalists never achieve. I represented RaiderVision at the STN National Convention, where I received the Broadcast Excellence Award: Superior in Achievement in Scholastic Broadcast News.</p>
+        <p class="about-p">Outside the studio, I teach feature storytelling and human interest journalism to middle school students through Breakthrough Miami. This summer, I am leading media and content creation at Camp Wayne for Girls.</p>
+        <div class="about-stats">
+          <div><div class="stat-num">3x</div><div class="stat-lbl">NATAS Award Winner</div></div>
+          <div><div class="stat-num">30+</div><div class="stat-lbl">Awards and Honors</div></div>
+          <div><div class="stat-num">3</div><div class="stat-lbl">Years at RaiderVision</div></div>
+        </div>
       </div>
-      <div class="about-text reveal right">
-        <div class="sec-kicker"><div class="kl"></div><span class="kt">About Lennon</span></div>
-        <h2 class="sec-title">The Full Picture</h2>
-        <p>Lennon Spektor is a junior at Gulliver Preparatory School in Miami Beach, Florida, where she is enrolled in the school's Digital Mass Media and Business and Entrepreneurship signature programs. She has built one of the most decorated high school broadcast journalism portfolios in the country.</p>
-        <p>Her three Regional Student Emmy wins are not just impressive for a teenager — they are impressive for anyone. She earned them through the same work ethic that drives everything she does: showing up early, staying late, holding her team to a high standard, and refusing to submit anything that isn't ready.</p>
-        <p>She is a member of the National Honor Society, National English Honor Society, and Quill and Scroll International Journalism Honor Society. She is a certified Red Cross Lifeguard. She runs a business. She teaches kids. She makes great television.</p>
-        <p>She is exactly the kind of student who arrives on a college campus and immediately makes it better.</p>
+      <div class="photo-frame reveal right">
+        <img src="assets/images/lennon.jpg" alt="Lennon Spektor" loading="lazy">
       </div>
     </div>
-  </section>
+  </div>
 
-  <!-- SKILLS -->
-  <section class="sec sec-white" id="skills">
-    <div class="sec-kicker"><div class="kl"></div><span class="kt">Capabilities</span></div>
-    <h2 class="sec-title reveal" style="margin-bottom: 1.75rem;">What She Brings</h2>
-    <div class="skills-grid">
-      <div class="skill-item reveal reveal-delay-1"><span class="skill-icon">🎙️</span><span class="skill-name">Broadcast Journalism</span></div>
-      <div class="skill-item reveal reveal-delay-2"><span class="skill-icon">🎬</span><span class="skill-name">Executive Producing</span></div>
-      <div class="skill-item reveal reveal-delay-3"><span class="skill-icon">✍️</span><span class="skill-name">Scriptwriting</span></div>
-      <div class="skill-item reveal reveal-delay-4"><span class="skill-icon">🎤</span><span class="skill-name">Field Reporting</span></div>
-      <div class="skill-item reveal reveal-delay-1"><span class="skill-icon">🎞️</span><span class="skill-name">Video Editing</span></div>
-      <div class="skill-item reveal reveal-delay-2"><span class="skill-icon">📡</span><span class="skill-name">Live Production</span></div>
-      <div class="skill-item reveal reveal-delay-3"><span class="skill-icon">👩‍🏫</span><span class="skill-name">Journalism Instruction</span></div>
-      <div class="skill-item reveal reveal-delay-4"><span class="skill-icon">💼</span><span class="skill-name">Entrepreneurship</span></div>
+  <!-- CONTACT -->
+  <div class="sec-full">
+    <div class="sec" id="contact">
+      <div class="contact-center reveal">
+        <div class="contact-hed">Let's <em>Connect</em></div>
+        <p class="contact-sub">Always open to new opportunities, collaborations, and conversations.</p>
+        <div class="contact-btns">
+          <a href="mailto:lennonspektor@gmail.com" class="btn btn-pink">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            Email Me
+          </a>
+          <a href="https://www.linkedin.com/in/lennonspektor/" target="_blank" rel="noopener" class="btn btn-outline">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            LinkedIn
+          </a>
+          <a href="https://www.instagram.com/lennon_raidervision/" target="_blank" rel="noopener" class="btn btn-outline">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+            Instagram
+          </a>
+        </div>
+      </div>
     </div>
-  </section>
-
-  <!-- HONORS -->
-  <section class="sec sec-cream" style="padding-top: 2.5rem; padding-bottom: 2.5rem;">
-    <div class="sec-kicker"><div class="kl"></div><span class="kt">Honor Societies and Affiliations</span></div>
-    <div class="honors-list">
-      <span class="honor-tag">National Honor Society</span>
-      <span class="honor-tag">National English Honor Society</span>
-      <span class="honor-tag">Quill and Scroll International Journalism Honor Society</span>
-      <span class="honor-tag">Red Cross Certified Lifeguard</span>
-    </div>
-  </section>
+  </div>
 
   <!-- FOOTER -->
-  <footer id="contact">
-    <div class="footer-name">Lennon Spektor</div>
-    <div class="footer-sub">Broadcast Journalist &nbsp;·&nbsp; Executive Producer &nbsp;·&nbsp; Miami Beach, Florida</div>
-    <div class="footer-links">
-      <a href="mailto:lennonspektor@gmail.com" class="footer-link">Email</a>
-      <a href="https://www.linkedin.com/in/lennonspektor/" target="_blank" rel="noopener" class="footer-link">LinkedIn</a>
-    </div>
-    <div class="footer-copy">2026 Lennon Spektor. All rights reserved.</div>
+  <footer>
+    <div class="footer-brand">Lennon Spektor</div>
+    <div class="footer-meta">Miami, Florida · RaiderVision · Gulliver Preparatory School</div>
   </footer>
 
-  <script type="module">
-    import { animate, scroll } from "https://cdn.jsdelivr.net/npm/motion@latest/+esm"
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Video player">
+    <div class="lightbox-inner">
+      <button class="lightbox-close" id="lightboxClose" aria-label="Close video">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        Close
+      </button>
+      <video id="lightboxVideo" controls preload="metadata" style="width:100%;display:block;border-radius:6px;">
+      </video>
+      <div id="lightboxVimeo" style="display:none;width:100%;aspect-ratio:16/9;border-radius:6px;overflow:hidden;">
+        <iframe id="lightboxVimeoFrame" src="" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen style="width:100%;height:100%;display:block;"></iframe>
+      </div>
+      <div class="lightbox-title" id="lightboxTitle"></div>
+    </div>
+  </div>
 
-    // ── NAV scroll ──
-    const nav = document.getElementById('mainNav')
+  <script>
+    // ── SCROLL PROGRESS ──
+    const prog = document.getElementById('scrollProgress')
+    const nav  = document.getElementById('mainNav')
+
     window.addEventListener('scroll', () => {
-      nav.classList.toggle('scrolled', window.scrollY > 60)
+      const pct = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)
+      prog.style.transform = `scaleX(${Math.min(pct, 1)})`
+      nav.classList.toggle('scrolled', window.scrollY > 40)
     }, { passive: true })
 
-    // ── HERO entrance (direct CSS class toggle — no Motion needed) ──
-    setTimeout(() => {
-      document.getElementById('heroName').classList.add('visible')
-      document.getElementById('heroBadge').classList.add('visible')
-      document.getElementById('heroTagline').classList.add('visible')
-      document.getElementById('heroCta').classList.add('visible')
-      document.getElementById('scrollHint').classList.add('visible')
-    }, 100)
-
-    // ── HERO parallax ──
-    scroll(
-      animate('#heroBg', { y: [0, 130] }),
-      { target: document.getElementById('hero'), offset: ['start start','end start'] }
-    )
-
-    // ── PARALLAX BREAKS ──
-    scroll(animate('#pb1bg', { y:[0,90] }), { target:document.getElementById('pb1'), offset:['start end','end start'] })
-    scroll(animate('#pb2bg', { y:[0,90] }), { target:document.getElementById('pb2'), offset:['start end','end start'] })
-
-    // ── INTERSECTION OBSERVER — all .reveal elements ──
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible')
-          io.unobserve(entry.target)
+    // ── SMOOTH ANCHOR SCROLL ──
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const t = document.querySelector(a.getAttribute('href'))
+        if (t) {
+          e.preventDefault()
+          window.scrollTo({ top: t.getBoundingClientRect().top + window.scrollY - 70, behavior: 'smooth' })
         }
       })
-    }, { threshold: 0, rootMargin: '0px 0px -40px 0px' })
+    })
 
-    document.querySelectorAll('.reveal').forEach(el => io.observe(el))
+    // ── INTERSECTION OBSERVER: section reveals ──
+    const revealObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible')
+          revealObs.unobserve(e.target)
+        }
+      })
+    }, { threshold: 0.07, rootMargin: '0px 0px -40px 0px' })
+    document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el))
 
-    // Fallback: reveal anything still hidden after 2.5s (handles edge cases)
-    setTimeout(() => {
-      document.querySelectorAll('.reveal:not(.visible)').forEach(el => el.classList.add('visible'))
-    }, 2500)
-
-    // ── STATS counters (triggered when stats section is visible) ──
-    const statsIO = new IntersectionObserver((entries) => {
+    // ── AWARD CATEGORY STAGGER ──
+    const aObs = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          document.querySelectorAll('.stat-num').forEach((el, i) => {
-            const target = parseInt(el.dataset.target)
-            const suffix = el.dataset.suffix || ''
-            let start = 0
-            const step = () => {
-              start += target / 40
-              if (start >= target) {
-                el.textContent = target + suffix
-              } else {
-                el.textContent = Math.floor(start) + suffix
-                requestAnimationFrame(step)
+          const cats = document.querySelectorAll('.award-cat')
+          cats.forEach((c, i) => setTimeout(() => c.classList.add('visible'), i * 100))
+          aObs.unobserve(entry.target)
+        }
+      })
+    }, { threshold: 0.1 })
+    const catsWrap = document.querySelector('.award-cats')
+    if (catsWrap) aObs.observe(catsWrap)
+
+    // ── COUNT-UP ANIMATION ──
+    const countObs = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.querySelectorAll('[data-count]').forEach(el => {
+            const target = parseInt(el.dataset.count)
+            const dur = 1200
+            const step = 16
+            const inc = target / (dur / step)
+            let cur = 0
+            const timer = setInterval(() => {
+              cur = Math.min(cur + inc, target)
+              el.textContent = target >= 10 ? Math.floor(cur) + '+' : Math.floor(cur) + '×'
+              if (cur >= target) {
+                el.textContent = target >= 10 ? target + '+' : target + '×'
+                clearInterval(timer)
               }
-            }
-            setTimeout(step, i * 120)
+            }, step)
           })
-          statsIO.disconnect()
+          countObs.unobserve(entry.target)
         }
       })
-    }, { threshold: 0.5 })
-    statsIO.observe(document.getElementById('stats'))
+    }, { threshold: 0.3 })
+    const statsWrap = document.querySelector('.award-stats')
+    if (statsWrap) countObs.observe(statsWrap)
 
+    // ── WORK CARDS STAGGER on first view ──
+    const wObs = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity    = '0'
+          entry.target.style.transform  = 'translateY(20px)'
+          entry.target.style.transition = 'opacity 0.6s ease, transform 0.6s cubic-bezier(0.16,1,0.3,1)'
+          const idx = parseInt(entry.target.dataset.wi || 0)
+          setTimeout(() => {
+            entry.target.style.opacity   = '1'
+            entry.target.style.transform = 'none'
+          }, idx * 70)
+          wObs.unobserve(entry.target)
+        }
+      })
+    }, { threshold: 0.04 })
+
+    document.querySelectorAll('.vcard').forEach((c, i) => {
+      c.dataset.wi = i
+      wObs.observe(c)
+    })
+
+    // ── VIMEO THUMBNAIL ──
+    fetch('https://vimeo.com/api/oembed.json?url=https://vimeo.com/1180511798')
+      .then(r => r.json())
+      .then(d => {
+        const img = document.getElementById('vimeoThumb')
+        if (img && d.thumbnail_url) img.src = d.thumbnail_url.replace(/_\d+x\d+/, '_1280')
+      }).catch(() => {})
+
+    // ── LIGHTBOX ──
+    const lightbox           = document.getElementById('lightbox')
+    const lightboxVideo      = document.getElementById('lightboxVideo')
+    const lightboxVimeo      = document.getElementById('lightboxVimeo')
+    const lightboxVimeoFrame = document.getElementById('lightboxVimeoFrame')
+    const lightboxTitle      = document.getElementById('lightboxTitle')
+    const lightboxClose      = document.getElementById('lightboxClose')
+
+    function openLightbox(src, title, isPortrait, vimeoId) {
+      lightboxTitle.textContent = title
+      lightbox.classList.add('open')
+      document.querySelector('.lightbox-inner').classList.toggle('portrait', !!isPortrait)
+      document.body.style.overflow = 'hidden'
+      if (vimeoId) {
+        lightboxVideo.style.display = 'none'
+        lightboxVimeo.style.display = 'block'
+        lightboxVimeoFrame.src = 'https://player.vimeo.com/video/' + vimeoId + '?autoplay=1&color=e8899a'
+      } else {
+        lightboxVimeo.style.display = 'none'
+        lightboxVideo.style.display = 'block'
+        lightboxVideo.src = src
+        lightboxVideo.play()
+      }
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove('open')
+      lightboxVideo.pause()
+      lightboxVideo.src = ''
+      lightboxVimeoFrame.src = ''
+      lightboxVimeo.style.display = 'none'
+      lightboxVideo.style.display = 'block'
+      document.body.style.overflow = ''
+    }
+
+    document.querySelectorAll('.vcard').forEach(card => {
+      card.addEventListener('click', () => {
+        const src      = card.dataset.src
+        const title    = card.dataset.title
+        const isPortrait = card.dataset.portrait === 'true'
+        const vimeoId  = card.dataset.vimeo
+        if (src || vimeoId) openLightbox(src, title, isPortrait, vimeoId)
+      })
+    })
+
+    lightboxClose.addEventListener('click', closeLightbox)
+    lightbox.addEventListener('click', e => {
+      if (e.target === lightbox) closeLightbox()
+    })
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeLightbox()
+    })
+
+    // ── TIMELINE STAGGER ──
+    const tlObs = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const items = document.querySelectorAll('.tl-item')
+          items.forEach((item, i) => {
+            setTimeout(() => item.classList.add('visible'), i * 120)
+          })
+          tlObs.unobserve(entry.target)
+        }
+      })
+    }, { threshold: 0.05 })
+    const tlWrap = document.querySelector('.timeline')
+    if (tlWrap) tlObs.observe(tlWrap)
+
+    // ── INTRO PARALLAX ──
+    const introName = document.querySelector('.intro-name')
+    window.addEventListener('scroll', () => {
+      if (window.scrollY < window.innerHeight && introName) {
+        introName.style.transform = `translateY(${window.scrollY * 0.15}px)`
+      }
+    }, { passive: true })
   </script>
+
 </body>
 </html>
